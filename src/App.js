@@ -128,6 +128,7 @@ class App extends Component {
     }
 
     this.createUser = this.createUser.bind (this);
+    this.callUser = this.callUser.bind (this);
   }
 
   createUser (event)  {
@@ -145,19 +146,24 @@ class App extends Component {
       } 
     )
   }
-  
 
-
-  handleChange = (e) => {
-    e.preventDefault()
-    const target = e.target
-    const value = target.value
-    const name = target.name
-
-    this.setState({
-        [name]: value
-    })
+  callUser()  {
+    const {users} = this.state.ContractInstance;
+    
+    users(
+      0,
+      (err, result) =>  {
+      console.log("cannot call" + JSON.stringify(result));
+    });
   }
+  
+  viewUser(id)  {
+    this.callUser(id)
+    .then(function(result) {
+      console.log("user 0 is " + JSON.stringify(result));
+    });
+  }
+  
   
   render() {
     return (
@@ -175,6 +181,7 @@ class App extends Component {
             </form>
           <br />
           <br />
+          <button onClick={this.callUser}>view user 0</button>
       </div>
     );
   }
