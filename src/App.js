@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import CreateGame from './components/CreateGame';
 
 class App extends Component {
   constructor (props) {
@@ -137,7 +138,6 @@ class App extends Component {
     const { _createUser } = this.state.ContractInstance;
     const {userName: newState} = this.state;
 
-
     _createUser(
       window.web3.eth.accounts[0],
       newState,
@@ -149,21 +149,12 @@ class App extends Component {
 
   callUser()  {
     const {users} = this.state.ContractInstance;
-    
     users(
       0,
       (err, result) =>  {
       console.log("cannot call" + JSON.stringify(result));
     });
   }
-  
-  viewUser(id)  {
-    this.callUser(id)
-    .then(function(result) {
-      console.log("user 0 is " + JSON.stringify(result));
-    });
-  }
-  
   
   render() {
     return (
@@ -178,10 +169,11 @@ class App extends Component {
             <label htmlFor="userName">User Name</label>
             <input type="text" name="userName" value={this.state.userName} onChange={event => this.setState({userName: event.target.value})}/>
             <input type="submit" name="submit" value="Submit" />
-            </form>
+          </form>
           <br />
           <br />
           <button onClick={this.callUser}>view user 0</button>
+          <CreateGame myAddress={window.web3.eth.accounts[0]}/>
       </div>
     );
   }
