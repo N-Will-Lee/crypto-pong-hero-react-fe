@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-
+import { Router, Link } from "@reach/router";
+import LiveGame from './LiveGame';
 
 class CreateGame extends Component {
     constructor (props) {
@@ -14,17 +15,21 @@ class CreateGame extends Component {
 
     render() {
         return(
-            <form className="newGame" onSubmit={this.handleSubmit}>
+            <form className="newGame">
                 <p> Create a new Game!</p>
-                <label>My Wallet Address: {this.state.myWalletAddress}</label>
-                <br/>
-                <label htmlFor="opponent">Opponent Wallet Address: </label>
-                <input type="text" name="opponent" value={this.state.oppWalletAddress} onChange={event => this.setState({oppWalletAddress: event.target.value})}/>
-                <br />
-                <label htmlFor="wager">Wager Amount (eth): </label>
-                <input type="text" name="wager" value={this.state.wager} onChange={event => this.setState({wager: event.target.value})}/>
-                <br />
-                <input type="submit" name="submit" value="Start Game" />
+                <p>
+                    <label>My Wallet Address: {this.props.myAddress}</label>
+                    <br/>
+                    <label htmlFor="opponent">Opponent Wallet Address: </label>
+                    <input type="text" name="opponent" value={this.state.oppWalletAddress} onChange={event => this.setState({oppWalletAddress: event.target.value})}/>
+                    <br />
+                    <label htmlFor="wager">Wager Amount (eth): </label>
+                    <input type="text" name="wager" value={this.state.wager} onChange={event => this.setState({wager: event.target.value})}/>
+                </p>
+                <p>
+                    {/* <LiveGame path="game" myAddress={this.props.myWalletAddress} oppWalletAddress={this.state.oppWalletAddress} wager={this.state.wager}/> */}
+                    <Link to="/game">Start Game</Link>
+                </p>
             </form>
         )
     }

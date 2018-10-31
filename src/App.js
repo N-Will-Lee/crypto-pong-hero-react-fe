@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import CreateGame from './components/CreateGame';
+import { render } from "react-dom";
+import { Router, Link } from "@reach/router";
+import UserLanding from './components/UserLanding';
+import LiveGame from './components/LiveGame';
 
 class App extends Component {
   constructor (props) {
@@ -125,11 +128,22 @@ class App extends Component {
 
     this.state = {
       ContractInstance: CryptoPongHero.at ('0x1375130b4e05af77cf6e3c76f379bd3ed2204803'),
-      userName: ""
+      userName: "",
+      oppWalletAddress: "0x5ed8cee6b63b1c6afce3ad7c92f4fd7e1b8fad9f",
+      wager: 2,
+      creatorWalletAddress: ""
     }
 
     this.createUser = this.createUser.bind (this);
     this.callUser = this.callUser.bind (this);
+    // this.submitGame = this.submitGame.bind (this);
+  }
+
+
+  ComponentDidMount() {
+    this.setState({
+      creatorWalletAddress: window.web3.eth.accounts[0]
+    })
   }
 
   createUser (event)  {
@@ -156,27 +170,47 @@ class App extends Component {
     });
   }
   
+  // submitGame(creator, opponent, winner, creatorScore, opponentScore,  wager, time)  {
+  //   const {_finish} = this.state.ContractInstance;
+  //   _finish(
+  //     creator, 
+  //     opponent,
+  //     winner,
+  //     creatorScore,
+  //     opponentScore,
+  //     wager,
+  //     time,
+  //     (err, result) =>  {
+  //       console.log("game is being submitted to the blockchain" + JSON.stringify(result));
+  //     }
+  //   );
+  // }
+
+  
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title"> Crypto Pong Hero Create User</h1>
+          <h1 className="App-title"> Crypto Pong Hero Home</h1>
         </header>
+        <nav>
+          <Link to="leaderboard">LeaderBoard</Link>
+          <Link to="/">Home</Link>
+          <Link to="Profile">profile</Link>
+        </nav>  
+          <Router>
+            <UserLanding  path="/" myAddress={window.web3.eth.accounts[0]}/>
+            <LiveGame path="/game" wager={this.state.wager} oppWalletAddress={this.state.oppWalletAddress} submitGame={this.submitGame}/>
+          </Router>
           <br />
           <br />
-          <form className="job-form" onSubmit={this.createUser}>
-            <label htmlFor="userName">User Name</label>
-            <input type="text" name="userName" value={this.state.userName} onChange={event => this.setState({userName: event.target.value})}/>
-            <input type="submit" name="submit" value="Submit" />
-          </form>
-          <br />
-          <br />
-          <button onClick={this.callUser}>view user 0</button>
-          <CreateGame myAddress={window.web3.eth.accounts[0]}/>
       </div>
     );
   }
 }
 
 export default App;
+
+
+
+// submitGame={this.submitGame} myAddress={window.web3.eth.accounts[0]}
