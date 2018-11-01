@@ -133,6 +133,44 @@ class App extends Component {
         "inputs": [
           {
             "name": "",
+            "type": "address"
+          }
+        ],
+        "name": "opponentToUnconfirmedGame",
+        "outputs": [
+          {
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [
+          {
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "name": "playerToGame",
+        "outputs": [
+          {
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [
+          {
+            "name": "",
             "type": "uint256"
           }
         ],
@@ -181,13 +219,13 @@ class App extends Component {
     ]);
 
     this.state = {
-      ContractInstance: CryptoPongHero.at ('0xBE7898cBC2A204a4064744399935bF5e28f00Bba'),
+      ContractInstance: CryptoPongHero.at ('0xA00AfF6d5389c3A577768E7d79b734Ba4df72bd0'),
       userName: "",
-      creatorWalletAddress: "",
+      creatorWalletAddress: window.web3.eth.accounts[0],
       oppWalletAddress: "",
       winner: "",
       creatorScore: 0,
-      opponentScore: 0,
+      oppScore: 0,
       wager: 2
 
     }
@@ -197,14 +235,19 @@ class App extends Component {
     this.setOppWalletAddress = this.setOppWalletAddress.bind (this);
     this.setWager = this.setWager.bind (this);
     this.callUnconfirmedGame = this.callUnconfirmedGame.bind (this);
+    this.submitGame = this.submitGame.bind (this);
+    this.setOppScore = this.setOppScore.bind (this);
+    this.setCreatorScore = this.setCreatorScore.bind (this);
+    this.declareCreatorWinner = this.declareCreatorWinner.bind (this);
+    this.declareOpponentWinner = this.declareOpponentWinner.bind (this);
   }
 
 
-  ComponentDidMount() {
-    this.setState({
-      creatorWalletAddress: window.web3.eth.accounts[0]
-    })
-  }
+  // ComponentDidMount() {
+  //   this.setState({
+  //     creatorWalletAddress: window.web3.eth.accounts[0]
+  //   })
+  // }
 
   createUser (event)  {
     event.preventDefault();
@@ -230,6 +273,28 @@ class App extends Component {
     });
   }
 
+  submitGame(event)  {
+    event.preventDefault();
+    const { _finish } = this.state.ContractInstance;
+    _finish(
+      this.state.creatorWalletAddress,
+      this.state.oppWalletAddress,
+      this.state.winner,
+      this.state.creatorScore,
+      this.state.oppScore,
+      this.state.wager,
+      1541029968,
+      {
+        gas: 3000000,
+        from: window.web3.eth.accounts[0],
+        value: window.web3.toWei (this.state.wager, 'ether')
+      },
+      (err, result) =>  {
+        console.log("game is being submitted to the blockchain" + JSON.stringify(result));
+      }
+    );
+  }
+
   callUnconfirmedGame(address) {
     const { playerToGame } = this.state.ContractInstance;
 
@@ -251,6 +316,31 @@ class App extends Component {
       wager: int 
     })
   }
+
+  setOppScore(int) {
+    this.setState({
+      oppScore: int 
+    })
+  }
+
+  setCreatorScore(int)  {
+    this.setState({
+      creatorScore: int 
+    })
+  }
+
+  declareCreatorWinner()  {
+    this.setState({
+      winner: window.web3.eth.accounts[0]
+    })
+  }
+  declareOpponentWinner()  {
+    this.setState({
+      winner: this.state.oppWalletAddress
+    });
+  }
+
+
   render() {
     return (
       <div className="App">
@@ -263,8 +353,8 @@ class App extends Component {
           <Link to="Profile">profile</Link>
         </nav>  
           <Router>
-            <UserLanding  path="/" myAddress={window.web3.eth.accounts[0]} setOppWalletAddress={this.setOppWalletAddress} setWager={this.setWager} callUnconfirmedGame={this.callUnconfirmedGame}/>
-            <LiveGame path="/game" wager={this.state.wager} oppWalletAddress={this.state.oppWalletAddress}/>
+            <UserLanding  path="/" myAddress={this.state.creatorWalletAddress} setOppWalletAddress={this.setOppWalletAddress} setWager={this.setWager} callUnconfirmedGame={this.callUnconfirmedGame}/>
+            <LiveGame path="/game" wager={this.state.wager} oppWalletAddress={this.state.oppWalletAddress} myAddress={this.state.creatorWalletAddress} submitGame={this.submitGame} setOppScore={this.setOppScore} setCreatorScore={this.setCreatorScore} declareCreatorWinner={this.declareCreatorWinner} declareOpponentWinner={this.declareOpponentWinner} winner={this.state.winner}/>
           </Router>
           <br />
           <br />
