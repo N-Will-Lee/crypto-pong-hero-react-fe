@@ -177,12 +177,15 @@ class LiveGame extends Component {
         ]);
       
         this.state = {
-            ContractInstance: CryptoPongHero.at ('0x731468266cEa37f6115D30e5E64608a64d0B7B86'),
+            ContractInstance: CryptoPongHero.at ('0xBE7898cBC2A204a4064744399935bF5e28f00Bba'),
             creatorScore: 0,
             oppScore: 0,
-            wager: this.props.wager
+            wager: this.props.wager,
+            winner: ""
         }
         this.submitGame = this.submitGame.bind (this);
+        this.declareCreatorWinner = this.declareCreatorWinner.bind (this);
+        this.declareOpponentWinner = this.declareOpponentWinner.bind (this);
       }
 
     submitGame(event)  {
@@ -191,7 +194,7 @@ class LiveGame extends Component {
       _finish(
         window.web3.eth.accounts[0],
         this.props.oppWalletAddress,
-        this.props.oppWalletAddress,
+        this.state.winner,
         this.state.creatorScore,
         this.state.oppScore,
         this.state.wager,
@@ -205,6 +208,17 @@ class LiveGame extends Component {
           console.log("game is being submitted to the blockchain" + JSON.stringify(result));
         }
       );
+    }
+
+    declareCreatorWinner()  {
+      this.setState({
+        winner: window.web3.eth.accounts[0]
+      })
+    }
+    declareOpponentWinner()  {
+      this.setState({
+        winner: this.props.oppWalletAddress
+      });
     }
 
     render() {
@@ -223,19 +237,22 @@ class LiveGame extends Component {
                 <br />
                 <label htmlFor="oppScore">Opponent Score:  </label>
                 <input type="text" name="oppScore" value={this.state.oppScore} onChange={event => this.setState({oppScore: event.target.value})}/>
+                <br/>
+                <label htmlFor="winner">winner: {this.state.winner} </label>
+                <br/>
+                <button type="button" onClick={this.declareCreatorWinner}>Home Team won!</button>
+                <button type="button" onClick={this.declareOpponentWinner}>Away Team won!</button>
+                <br/>
     
                 <input type="submit" name="submit" value="Submit Results" />
             </form>
-          </div>
+          </div> 
         )
     }
 }
 
 export default LiveGame
 
-
-
-// this.props.oppWalletAddress, this.props.oppWalletAddress, this.state.creatorScore, this.state.oppScore, this.state.wager, 234235234
 
 
 

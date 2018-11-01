@@ -11,7 +11,7 @@ class CreateGame extends Component {
             oppWalletAddress: "",
             wager: 0
         }
-      }
+    }
 
     render() {
         return(
@@ -21,13 +21,12 @@ class CreateGame extends Component {
                     <label>My Wallet Address: {this.props.myAddress}</label>
                     <br/>
                     <label htmlFor="opponent">Opponent Wallet Address: </label>
-                    <input type="text" name="opponent" value={this.state.oppWalletAddress} onChange={event => this.setState({oppWalletAddress: event.target.value})}/>
+                    <input type="text" name="opponent" onChange={event => this.props.setOppWalletAddress(event.target.value)} />
                     <br />
                     <label htmlFor="wager">Wager Amount (eth): </label>
-                    <input type="text" name="wager" value={this.state.wager} onChange={event => this.setState({wager: event.target.value})}/>
+                    <input type="text" name="wager" onChange={event => this.props.setWager(event.target.value)}/>
                 </p>
                 <p>
-                    {/* <LiveGame path="game" myAddress={this.props.myWalletAddress} oppWalletAddress={this.state.oppWalletAddress} wager={this.state.wager}/> */}
                     <Link to="/game">Start Game</Link>
                 </p>
             </form>
@@ -36,3 +35,7 @@ class CreateGame extends Component {
 }
 
 export default CreateGame
+
+// onChange={event => this.props.changeGameParams(oppWalletAddress, event.target.value)}/>
+
+{/* <input type="text" name="opponent" value={this.state.oppWalletAddress} onChange={event => this.setState({oppWalletAddress: event.target.value})} /> */}
