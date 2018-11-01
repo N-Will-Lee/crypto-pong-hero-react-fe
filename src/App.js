@@ -169,22 +169,6 @@ class App extends Component {
       console.log("cannot call" + JSON.stringify(result));
     });
   }
-  
-  // submitGame(creator, opponent, winner, creatorScore, opponentScore,  wager, time)  {
-  //   const {_finish} = this.state.ContractInstance;
-  //   _finish(
-  //     creator, 
-  //     opponent,
-  //     winner,
-  //     creatorScore,
-  //     opponentScore,
-  //     wager,
-  //     time,
-  //     (err, result) =>  {
-  //       console.log("game is being submitted to the blockchain" + JSON.stringify(result));
-  //     }
-  //   );
-  // }
 
   
   render() {

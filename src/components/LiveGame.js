@@ -7,222 +7,177 @@ class LiveGame extends Component {
         super (props);
         
         const CryptoPongHero = window.web3.eth.contract ([
-            {
-              "constant": false,
-              "inputs": [
-                {
-                  "name": "_gameId",
-                  "type": "uint256"
-                }
-              ],
-              "name": "_confirmGame",
-              "outputs": [],
-              "payable": true,
-              "stateMutability": "payable",
-              "type": "function"
-            },
-            {
-              "constant": false,
-              "inputs": [
-                {
-                  "name": "_walletAddress",
-                  "type": "address"
-                },
-                {
-                  "name": "_userName",
-                  "type": "string"
-                }
-              ],
-              "name": "_createUser",
-              "outputs": [],
-              "payable": false,
-              "stateMutability": "nonpayable",
-              "type": "function"
-            },
-            {
-              "constant": false,
-              "inputs": [
-                {
-                  "name": "_cr",
-                  "type": "address"
-                },
-                {
-                  "name": "_opp",
-                  "type": "address"
-                },
-                {
-                  "name": "_winner",
-                  "type": "address"
-                },
-                {
-                  "name": "_crScore",
-                  "type": "uint8"
-                },
-                {
-                  "name": "_oppScore",
-                  "type": "uint8"
-                },
-                {
-                  "name": "_wager",
-                  "type": "uint256"
-                },
-                {
-                  "name": "_time",
-                  "type": "uint256"
-                }
-              ],
-              "name": "_finish",
-              "outputs": [],
-              "payable": true,
-              "stateMutability": "payable",
-              "type": "function"
-            },
-            {
-              "constant": false,
-              "inputs": [
-                {
-                  "name": "newOwner",
-                  "type": "address"
-                }
-              ],
-              "name": "transferOwnership",
-              "outputs": [],
-              "payable": false,
-              "stateMutability": "nonpayable",
-              "type": "function"
-            },
-            {
-              "anonymous": false,
-              "inputs": [
-                {
-                  "indexed": true,
-                  "name": "previousOwner",
-                  "type": "address"
-                },
-                {
-                  "indexed": true,
-                  "name": "newOwner",
-                  "type": "address"
-                }
-              ],
-              "name": "OwnershipTransferred",
-              "type": "event"
-            },
-            {
-              "constant": true,
-              "inputs": [
-                {
-                  "name": "",
-                  "type": "uint256"
-                }
-              ],
-              "name": "gamesPlayed",
-              "outputs": [
-                {
-                  "name": "creator",
-                  "type": "address"
-                },
-                {
-                  "name": "opponent",
-                  "type": "address"
-                },
-                {
-                  "name": "winner",
-                  "type": "address"
-                },
-                {
-                  "name": "op1Score",
-                  "type": "uint8"
-                },
-                {
-                  "name": "op2Score",
-                  "type": "uint8"
-                },
-                {
-                  "name": "wager",
-                  "type": "uint256"
-                },
-                {
-                  "name": "timeStamp",
-                  "type": "uint256"
-                },
-                {
-                  "name": "complete",
-                  "type": "bool"
-                }
-              ],
-              "payable": false,
-              "stateMutability": "view",
-              "type": "function"
-            },
-            {
-              "constant": true,
-              "inputs": [],
-              "name": "owner",
-              "outputs": [
-                {
-                  "name": "",
-                  "type": "address"
-                }
-              ],
-              "payable": false,
-              "stateMutability": "view",
-              "type": "function"
-            },
-            {
-              "constant": true,
-              "inputs": [
-                {
-                  "name": "",
-                  "type": "uint256"
-                }
-              ],
-              "name": "userIdToAddress",
-              "outputs": [
-                {
-                  "name": "",
-                  "type": "address"
-                }
-              ],
-              "payable": false,
-              "stateMutability": "view",
-              "type": "function"
-            },
-            {
-              "constant": true,
-              "inputs": [
-                {
-                  "name": "",
-                  "type": "uint256"
-                }
-              ],
-              "name": "users",
-              "outputs": [
-                {
-                  "name": "id",
-                  "type": "address"
-                },
-                {
-                  "name": "userName",
-                  "type": "string"
-                },
-                {
-                  "name": "wins",
-                  "type": "uint32"
-                },
-                {
-                  "name": "losses",
-                  "type": "uint32"
-                }
-              ],
-              "payable": false,
-              "stateMutability": "view",
-              "type": "function"
-            }
-          ]);
+          {
+            "constant": false,
+            "inputs": [
+              {
+                "name": "_gameId",
+                "type": "uint256"
+              }
+            ],
+            "name": "_confirmGame",
+            "outputs": [],
+            "payable": true,
+            "stateMutability": "payable",
+            "type": "function"
+          },
+          {
+            "constant": false,
+            "inputs": [
+              {
+                "name": "_walletAddress",
+                "type": "address"
+              },
+              {
+                "name": "_userName",
+                "type": "string"
+              }
+            ],
+            "name": "_createUser",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+          },
+          {
+            "constant": false,
+            "inputs": [
+              {
+                "name": "_cr",
+                "type": "address"
+              },
+              {
+                "name": "_opp",
+                "type": "address"
+              },
+              {
+                "name": "_winner",
+                "type": "address"
+              },
+              {
+                "name": "_crScore",
+                "type": "uint8"
+              },
+              {
+                "name": "_oppScore",
+                "type": "uint8"
+              },
+              {
+                "name": "_wager",
+                "type": "uint256"
+              },
+              {
+                "name": "_time",
+                "type": "uint256"
+              }
+            ],
+            "name": "_finish",
+            "outputs": [],
+            "payable": true,
+            "stateMutability": "payable",
+            "type": "function"
+          },
+          {
+            "constant": true,
+            "inputs": [
+              {
+                "name": "",
+                "type": "uint256"
+              }
+            ],
+            "name": "gamesPlayed",
+            "outputs": [
+              {
+                "name": "creator",
+                "type": "address"
+              },
+              {
+                "name": "opponent",
+                "type": "address"
+              },
+              {
+                "name": "winner",
+                "type": "address"
+              },
+              {
+                "name": "op1Score",
+                "type": "uint8"
+              },
+              {
+                "name": "op2Score",
+                "type": "uint8"
+              },
+              {
+                "name": "wager",
+                "type": "uint256"
+              },
+              {
+                "name": "timeStamp",
+                "type": "uint256"
+              },
+              {
+                "name": "complete",
+                "type": "bool"
+              }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "constant": true,
+            "inputs": [
+              {
+                "name": "",
+                "type": "uint256"
+              }
+            ],
+            "name": "userIdToAddress",
+            "outputs": [
+              {
+                "name": "",
+                "type": "address"
+              }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "constant": true,
+            "inputs": [
+              {
+                "name": "",
+                "type": "uint256"
+              }
+            ],
+            "name": "users",
+            "outputs": [
+              {
+                "name": "id",
+                "type": "address"
+              },
+              {
+                "name": "userName",
+                "type": "string"
+              },
+              {
+                "name": "wins",
+                "type": "uint32"
+              },
+              {
+                "name": "losses",
+                "type": "uint32"
+              }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+          }
+        ]);
       
         this.state = {
-            ContractInstance: CryptoPongHero.at ('0x711b69e98C92A598904389405c14a063CEb54A74'),
+            ContractInstance: CryptoPongHero.at ('0x731468266cEa37f6115D30e5E64608a64d0B7B86'),
             creatorScore: 0,
             oppScore: 0,
             wager: this.props.wager
@@ -240,7 +195,12 @@ class LiveGame extends Component {
         this.state.creatorScore,
         this.state.oppScore,
         this.state.wager,
-        234235234,
+        1541029968,
+        {
+          gas: 3000000,
+          from: window.web3.eth.accounts[0],
+          value: window.web3.toWei (this.state.wager, 'ether')
+        },
         (err, result) =>  {
           console.log("game is being submitted to the blockchain" + JSON.stringify(result));
         }
