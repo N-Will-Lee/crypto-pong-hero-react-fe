@@ -274,14 +274,29 @@ class App extends Component {
     this.declareCreatorWinner = this.declareCreatorWinner.bind (this);
     this.declareOpponentWinner = this.declareOpponentWinner.bind (this);
     this.getPlayerGameCount = this.getPlayerGameCount.bind (this);
-    this.getGameinformation = this.getGameinformation.bind (this);
     this.getAllGamesOfAddress = this.getAllGamesOfAddress.bind (this);
     this.handleTotalGameNumber = this.handleTotalGameNumber.bind(this);
+    this.getGameinformation = this.getGameinformation.bind (this);
+    this.handleGameInformation = this.handleGameInformation.bind (this);
   }
 
+  componentWillMount() {
+    this.handleTotalGameNumber()
+  }
+  componentDidMount() {
+    this.delay(500).then(() => { 
+      console.log('done');
+      this.handleGameInformation()
+    })
+  }
 
+  delay(millisecs) {
+    return new Promise(resolve => {
+      setTimeout(() => resolve(millisecs), millisecs)
+    })
+  }
   //works
-  createUser (event)  {
+  createUser (event)   {
     event.preventDefault();
 
     const { _createUser } = this.state.ContractInstance;
@@ -328,6 +343,17 @@ class App extends Component {
       }
     );
   }
+
+  //works - make sure address has loaded
+  getPlayerGameCount() {
+    const { playerGameCount } = this.state.ContractInstance;
+
+    playerGameCount(
+      this.state.creatorWalletAddress,
+      (err, result) =>  {
+        console.log("player game count is:" + JSON.stringify(result));
+      });
+  }
   
   //works
   getTotalGameNumber() {
@@ -342,7 +368,6 @@ class App extends Component {
       });
     });
   }
-
   handleTotalGameNumber() {
     this.getTotalGameNumber()
     .then(count => {
@@ -351,44 +376,52 @@ class App extends Component {
     })
   }
 
-  //works - make sure address has loaded
-  getPlayerGameCount() {
-    const { playerGameCount } = this.state.ContractInstance;
-
-    playerGameCount(
-      this.state.creatorWalletAddress,
-      (err, result) =>  {
-        console.log("player game count is:" + JSON.stringify(result));
-      });
-  }
-
   //works
   getGameinformation(int) {
     const { gamesPlayed } = this.state.ContractInstance;
 
-    gamesPlayed(
-      int,
-      (err, result) =>  {
-        console.log("game information for game " + int + " is: " + JSON.stringify(result));
-        return result;
-      });
+    return new Promise((resolve, reject) => {
+      gamesPlayed(
+        int,
+        (err, result) =>  {
+          if (err) return reject(err);
+          // console.log("game information for game " + int + " is: " + JSON.stringify(result));
+          resolve(result);
+        });
+    })
+  }
+  //works - sets state with 'un JSON.stringified' arrays - first 3 indexes are address as strings, last 4 need to be stringified separately.
+  handleGameInformation(int)  {
+    console.log("gamecount before loop runs: ", this.state.gameCount)
+    this.setState({
+      allGames: []
+    })
+    for(let i=0; i<this.state.gameCount; i++)  {
+      this.getGameinformation(i)
+      .then(info => {
+        // console.log("actual game information for game " + int + " is: " + info);
+        let newArr = this.state.allGames
+        newArr.push(info)
+        this.setState({
+          allGames: newArr
+        })
+      })
+    }
   }
 
 
   //Front end functions for consolidating data to app.js
 
-  getAllGamesOfAddress(address) {
-    this.handleTotalGameNumber();
-    let numberOfGames = this.state.gameCount;
+  getAllGamesOfAddress() {
     let gamesWithAddress = [];
-    console.log("number of games total: " + numberOfGames);
-    for (let i=0; i<numberOfGames; i++) {
-      let tempGameInfo = this.getGameinformation(i)
-      console.log(tempGameInfo);
-      if((tempGameInfo[0] || tempGameInfo[1]) === address)  {
+    for (let i=0; i<this.state.gameCount; i++) {
+      let tempGameInfo = this.state.allGames[i]
+      console.log("tempGameInfo is: ", tempGameInfo);
+      if((tempGameInfo[0] || tempGameInfo[1]) === this.state.creatorWalletAddress)  {
         gamesWithAddress.push(tempGameInfo);
       }
     }
+    console.log("games With My Address are: ", gamesWithAddress);
     return gamesWithAddress;
   }
 
@@ -442,6 +475,8 @@ class App extends Component {
                           setOppWalletAddress={this.setOppWalletAddress} 
                           setWager={this.setWager} 
                           getAllGamesOfAddress={this.getAllGamesOfAddress}
+                          gameCount={this.state.gameCount}
+                          allGames={this.state.allGames}
                         />
             <LiveGame path="/game"  
                       wager={this.state.wager} 
@@ -457,9 +492,9 @@ class App extends Component {
           </Router>
           <br />
           <br />
-          <button type="button" onClick={this.getPlayerGameCount}>get player game count</button>
+          <button type="button" onClick={this.getAllGamesOfAddress}>console log all names of addresss</button>
           {/* <button type="button" onClick={this.getGameinformation}>get game information for game 0</button> */}
-          <button type="button" onClick={this.handleTotalGameNumber}>calling handleTotalGameNumber</button>
+          <button type="button" onClick={this.testHandleGameInformation}>handle game info for all games</button>
       </div>
     );
   }
