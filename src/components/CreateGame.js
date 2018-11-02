@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Router, Link } from "@reach/router";
-import LiveGame from './LiveGame';
+import { Link } from "@reach/router";
 
 class CreateGame extends Component {
     constructor (props) {
@@ -35,7 +34,3 @@ class CreateGame extends Component {
 }
 
 export default CreateGame
-
-// onChange={event => this.props.changeGameParams(oppWalletAddress, event.target.value)}/>
-
-{/* <input type="text" name="opponent" value={this.state.oppWalletAddress} onChange={event => this.setState({oppWalletAddress: event.target.value})} /> */}

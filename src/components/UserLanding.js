@@ -12,8 +12,13 @@ const UserLanding = (props) => {
     return(
         <div>
             <br/>
-                <CreateGame myAddress={props.myAddress} setOppWalletAddress={props.setOppWalletAddress} setWager={props.setWager}/>
-                <ConfirmGames myAddress={props.myAddress} callUnconfirmedGame={props.callUnconfirmedGame}/>
+                <CreateGame myAddress={props.myAddress} 
+                            setOppWalletAddress={props.setOppWalletAddress} 
+                            setWager={props.setWager}
+                        />
+                <ConfirmGames myAddress={props.myAddress} 
+                            getAllGamesOfAddress={props.getAllGamesOfAddress}
+                        />
         </div>
     )
 }

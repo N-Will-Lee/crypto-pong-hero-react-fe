@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-import CreateGame from './components/CreateGame';
-import { render } from "react-dom";
 import { Router, Link } from "@reach/router";
 import UserLanding from './components/UserLanding';
 import LiveGame from './components/LiveGame';
@@ -12,73 +10,53 @@ class App extends Component {
 
     const CryptoPongHero = window.web3.eth.contract ([
       {
-        "constant": false,
+        "constant": true,
         "inputs": [
           {
-            "name": "_gameId",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "name": "playerGameCount",
+        "outputs": [
+          {
+            "name": "",
             "type": "uint256"
           }
         ],
-        "name": "_confirmGame",
-        "outputs": [],
-        "payable": true,
-        "stateMutability": "payable",
-        "type": "function"
-      },
-      {
-        "constant": false,
-        "inputs": [
-          {
-            "name": "_walletAddress",
-            "type": "address"
-          },
-          {
-            "name": "_userName",
-            "type": "string"
-          }
-        ],
-        "name": "_createUser",
-        "outputs": [],
         "payable": false,
-        "stateMutability": "nonpayable",
+        "stateMutability": "view",
         "type": "function"
       },
       {
-        "constant": false,
+        "constant": true,
         "inputs": [
           {
-            "name": "_cr",
-            "type": "address"
-          },
-          {
-            "name": "_opp",
-            "type": "address"
-          },
-          {
-            "name": "_winner",
-            "type": "address"
-          },
-          {
-            "name": "_crScore",
-            "type": "uint8"
-          },
-          {
-            "name": "_oppScore",
-            "type": "uint8"
-          },
-          {
-            "name": "_wager",
-            "type": "uint256"
-          },
-          {
-            "name": "_time",
+            "name": "",
             "type": "uint256"
           }
         ],
-        "name": "_finish",
-        "outputs": [],
-        "payable": true,
-        "stateMutability": "payable",
+        "name": "users",
+        "outputs": [
+          {
+            "name": "id",
+            "type": "address"
+          },
+          {
+            "name": "userName",
+            "type": "string"
+          },
+          {
+            "name": "wins",
+            "type": "uint32"
+          },
+          {
+            "name": "losses",
+            "type": "uint32"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "view",
         "type": "function"
       },
       {
@@ -133,14 +111,14 @@ class App extends Component {
         "inputs": [
           {
             "name": "",
-            "type": "address"
+            "type": "uint256"
           }
         ],
-        "name": "opponentToUnconfirmedGame",
+        "name": "gameToAwayPlayer",
         "outputs": [
           {
             "name": "",
-            "type": "uint256"
+            "type": "address"
           }
         ],
         "payable": false,
@@ -148,22 +126,17 @@ class App extends Component {
         "type": "function"
       },
       {
-        "constant": true,
+        "constant": false,
         "inputs": [
           {
-            "name": "",
-            "type": "address"
-          }
-        ],
-        "name": "playerToGame",
-        "outputs": [
-          {
-            "name": "",
+            "name": "_gameId",
             "type": "uint256"
           }
         ],
-        "payable": false,
-        "stateMutability": "view",
+        "name": "_confirmGame",
+        "outputs": [],
+        "payable": true,
+        "stateMutability": "payable",
         "type": "function"
       },
       {
@@ -186,6 +159,24 @@ class App extends Component {
         "type": "function"
       },
       {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "_walletAddress",
+            "type": "address"
+          },
+          {
+            "name": "_userName",
+            "type": "string"
+          }
+        ],
+        "name": "_createUser",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
         "constant": true,
         "inputs": [
           {
@@ -193,40 +184,82 @@ class App extends Component {
             "type": "uint256"
           }
         ],
-        "name": "users",
+        "name": "gameToHomePlayer",
         "outputs": [
           {
-            "name": "id",
+            "name": "",
             "type": "address"
-          },
-          {
-            "name": "userName",
-            "type": "string"
-          },
-          {
-            "name": "wins",
-            "type": "uint32"
-          },
-          {
-            "name": "losses",
-            "type": "uint32"
           }
         ],
         "payable": false,
         "stateMutability": "view",
         "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "_getTotalGameNumber",
+        "outputs": [
+          {
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "_cr",
+            "type": "address"
+          },
+          {
+            "name": "_opp",
+            "type": "address"
+          },
+          {
+            "name": "_winner",
+            "type": "address"
+          },
+          {
+            "name": "_crScore",
+            "type": "uint8"
+          },
+          {
+            "name": "_oppScore",
+            "type": "uint8"
+          },
+          {
+            "name": "_wager",
+            "type": "uint256"
+          },
+          {
+            "name": "_time",
+            "type": "uint256"
+          }
+        ],
+        "name": "_finish",
+        "outputs": [],
+        "payable": true,
+        "stateMutability": "payable",
+        "type": "function"
       }
     ]);
 
     this.state = {
-      ContractInstance: CryptoPongHero.at ('0xA00AfF6d5389c3A577768E7d79b734Ba4df72bd0'),
+      ContractInstance: CryptoPongHero.at ('0x99f820D7D64B80BeB761140A91B4DB04f65547bA'),
       userName: "",
       creatorWalletAddress: window.web3.eth.accounts[0],
       oppWalletAddress: "",
       winner: "",
       creatorScore: 0,
       oppScore: 0,
-      wager: 2
+      wager: 2,
+      allGames: [],
+      gameCount: 0
 
     }
 
@@ -234,21 +267,20 @@ class App extends Component {
     this.callUser = this.callUser.bind (this);
     this.setOppWalletAddress = this.setOppWalletAddress.bind (this);
     this.setWager = this.setWager.bind (this);
-    this.callUnconfirmedGame = this.callUnconfirmedGame.bind (this);
+    this.getTotalGameNumber = this.getTotalGameNumber.bind (this);
     this.submitGame = this.submitGame.bind (this);
     this.setOppScore = this.setOppScore.bind (this);
     this.setCreatorScore = this.setCreatorScore.bind (this);
     this.declareCreatorWinner = this.declareCreatorWinner.bind (this);
     this.declareOpponentWinner = this.declareOpponentWinner.bind (this);
+    this.getPlayerGameCount = this.getPlayerGameCount.bind (this);
+    this.getGameinformation = this.getGameinformation.bind (this);
+    this.getAllGamesOfAddress = this.getAllGamesOfAddress.bind (this);
+    this.handleTotalGameNumber = this.handleTotalGameNumber.bind(this);
   }
 
 
-  // ComponentDidMount() {
-  //   this.setState({
-  //     creatorWalletAddress: window.web3.eth.accounts[0]
-  //   })
-  // }
-
+  //works
   createUser (event)  {
     event.preventDefault();
 
@@ -264,15 +296,17 @@ class App extends Component {
     )
   }
 
+  //works
   callUser()  {
     const {users} = this.state.ContractInstance;
     users(
       0,
       (err, result) =>  {
-      console.log("cannot call" + JSON.stringify(result));
+      console.log("user 0 information: " + JSON.stringify(result));
     });
   }
 
+//works
   submitGame(event)  {
     event.preventDefault();
     const { _finish } = this.state.ContractInstance;
@@ -294,15 +328,68 @@ class App extends Component {
       }
     );
   }
+  
+  //works
+  getTotalGameNumber() {
+    const { _getTotalGameNumber } = this.state.ContractInstance;
 
-  callUnconfirmedGame(address) {
-    const { playerToGame } = this.state.ContractInstance;
-
-    playerToGame(
-      address,
+    return new Promise((resolve, reject) => {
+      _getTotalGameNumber(
       (err, result) =>  {
-        console.log("result of playertoGame mapping" + result);
+        if (err) return reject(err);
+        console.log("Total Game Number is: " + JSON.stringify(result));
+        resolve(result);
       });
+    });
+  }
+
+  handleTotalGameNumber() {
+    this.getTotalGameNumber()
+    .then(count => {
+      let newCount = parseInt(JSON.stringify(count)[1])
+      this.setState({gameCount: newCount});
+    })
+  }
+
+  //works - make sure address has loaded
+  getPlayerGameCount() {
+    const { playerGameCount } = this.state.ContractInstance;
+
+    playerGameCount(
+      this.state.creatorWalletAddress,
+      (err, result) =>  {
+        console.log("player game count is:" + JSON.stringify(result));
+      });
+  }
+
+  //works
+  getGameinformation(int) {
+    const { gamesPlayed } = this.state.ContractInstance;
+
+    gamesPlayed(
+      int,
+      (err, result) =>  {
+        console.log("game information for game " + int + " is: " + JSON.stringify(result));
+        return result;
+      });
+  }
+
+
+  //Front end functions for consolidating data to app.js
+
+  getAllGamesOfAddress(address) {
+    this.handleTotalGameNumber();
+    let numberOfGames = this.state.gameCount;
+    let gamesWithAddress = [];
+    console.log("number of games total: " + numberOfGames);
+    for (let i=0; i<numberOfGames; i++) {
+      let tempGameInfo = this.getGameinformation(i)
+      console.log(tempGameInfo);
+      if((tempGameInfo[0] || tempGameInfo[1]) === address)  {
+        gamesWithAddress.push(tempGameInfo);
+      }
+    }
+    return gamesWithAddress;
   }
 
   setOppWalletAddress(address) {
@@ -310,25 +397,21 @@ class App extends Component {
       oppWalletAddress: address 
     })
   }
-
   setWager(int) {
     this.setState({
       wager: int 
     })
   }
-
   setOppScore(int) {
     this.setState({
       oppScore: int 
     })
   }
-
   setCreatorScore(int)  {
     this.setState({
       creatorScore: int 
     })
   }
-
   declareCreatorWinner()  {
     this.setState({
       winner: window.web3.eth.accounts[0]
@@ -339,6 +422,7 @@ class App extends Component {
       winner: this.state.oppWalletAddress
     });
   }
+
 
 
   render() {
@@ -353,11 +437,29 @@ class App extends Component {
           <Link to="Profile">profile</Link>
         </nav>  
           <Router>
-            <UserLanding  path="/" myAddress={this.state.creatorWalletAddress} setOppWalletAddress={this.setOppWalletAddress} setWager={this.setWager} callUnconfirmedGame={this.callUnconfirmedGame}/>
-            <LiveGame path="/game" wager={this.state.wager} oppWalletAddress={this.state.oppWalletAddress} myAddress={this.state.creatorWalletAddress} submitGame={this.submitGame} setOppScore={this.setOppScore} setCreatorScore={this.setCreatorScore} declareCreatorWinner={this.declareCreatorWinner} declareOpponentWinner={this.declareOpponentWinner} winner={this.state.winner}/>
+            <UserLanding  path="/"  
+                          myAddress={this.state.creatorWalletAddress}
+                          setOppWalletAddress={this.setOppWalletAddress} 
+                          setWager={this.setWager} 
+                          getAllGamesOfAddress={this.getAllGamesOfAddress}
+                        />
+            <LiveGame path="/game"  
+                      wager={this.state.wager} 
+                      oppWalletAddress={this.state.oppWalletAddress} 
+                      myAddress={this.state.creatorWalletAddress} 
+                      submitGame={this.submitGame} 
+                      setOppScore={this.setOppScore} 
+                      setCreatorScore={this.setCreatorScore} 
+                      declareCreatorWinner={this.declareCreatorWinner} 
+                      declareOpponentWinner={this.declareOpponentWinner} 
+                      winner={this.state.winner}
+                    />
           </Router>
           <br />
           <br />
+          <button type="button" onClick={this.getPlayerGameCount}>get player game count</button>
+          {/* <button type="button" onClick={this.getGameinformation}>get game information for game 0</button> */}
+          <button type="button" onClick={this.handleTotalGameNumber}>calling handleTotalGameNumber</button>
       </div>
     );
   }

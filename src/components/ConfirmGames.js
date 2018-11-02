@@ -1,17 +1,20 @@
 import React from 'react';
-
+import IndividualGame from "./IndividualGame";
 
 
 const ConfirmGames = (props) => {
-
-    function sendAddressToGame()  {
-        props.callUnconfirmedGame(props.myAddress);
+    let myAddress = props.myAddress;
+    
+    function renderGameHistory() {
+        console.log(props.getAllGamesOfAddress(myAddress))
     }
 
+
     return(
-        <div class="newGame">
+        <div className="newGame">
             <p>my address is: {props.myAddress}</p>
-            <button type="button" onClick={sendAddressToGame}>look for games by me</button>
+            {/* {renderGameHistory}  */}
+            <button type="button" onClick={renderGameHistory}>show all games including me</button>
 
             
         </div>
@@ -27,3 +30,4 @@ const ConfirmGames = (props) => {
 
 
 export default ConfirmGames
+
