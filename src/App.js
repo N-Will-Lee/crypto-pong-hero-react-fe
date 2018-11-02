@@ -274,7 +274,7 @@ class App extends Component {
     this.declareCreatorWinner = this.declareCreatorWinner.bind (this);
     this.declareOpponentWinner = this.declareOpponentWinner.bind (this);
     this.getPlayerGameCount = this.getPlayerGameCount.bind (this);
-    this.getAllGamesOfAddress = this.getAllGamesOfAddress.bind (this);
+    // this.getAllGamesOfAddress = this.getAllGamesOfAddress.bind (this);
     this.handleTotalGameNumber = this.handleTotalGameNumber.bind(this);
     this.getGameinformation = this.getGameinformation.bind (this);
     this.handleGameInformation = this.handleGameInformation.bind (this);
@@ -412,18 +412,18 @@ class App extends Component {
 
   //Front end functions for consolidating data to app.js
 
-  getAllGamesOfAddress() {
-    let gamesWithAddress = [];
-    for (let i=0; i<this.state.gameCount; i++) {
-      let tempGameInfo = this.state.allGames[i]
-      console.log("tempGameInfo is: ", tempGameInfo);
-      if((tempGameInfo[0] || tempGameInfo[1]) === this.state.creatorWalletAddress)  {
-        gamesWithAddress.push(tempGameInfo);
-      }
-    }
-    console.log("games With My Address are: ", gamesWithAddress);
-    return gamesWithAddress;
-  }
+  // getAllGamesOfAddress() {
+  //   let gamesWithAddress = [];
+  //   for (let i=0; i<this.state.gameCount; i++) {
+  //     let tempGameInfo = this.state.allGames[i]
+  //     console.log("tempGameInfo is: ", tempGameInfo);
+  //     if((tempGameInfo[0] || tempGameInfo[1]) === this.state.creatorWalletAddress)  {
+  //       gamesWithAddress.push(tempGameInfo);
+  //     }
+  //   }
+  //   console.log("games With My Address are: ", gamesWithAddress);
+  //   return gamesWithAddress;
+  // }
 
   setOppWalletAddress(address) {
     this.setState({
@@ -474,7 +474,7 @@ class App extends Component {
                           myAddress={this.state.creatorWalletAddress}
                           setOppWalletAddress={this.setOppWalletAddress} 
                           setWager={this.setWager} 
-                          getAllGamesOfAddress={this.getAllGamesOfAddress}
+                          // getAllGamesOfAddress={this.getAllGamesOfAddress}
                           gameCount={this.state.gameCount}
                           allGames={this.state.allGames}
                         />
@@ -492,7 +492,7 @@ class App extends Component {
           </Router>
           <br />
           <br />
-          <button type="button" onClick={this.getAllGamesOfAddress}>console log all names of addresss</button>
+          {/* <button type="button" onClick={this.getAllGamesOfAddress}>console log all names of addresss</button> */}
           {/* <button type="button" onClick={this.getGameinformation}>get game information for game 0</button> */}
           <button type="button" onClick={this.testHandleGameInformation}>handle game info for all games</button>
       </div>

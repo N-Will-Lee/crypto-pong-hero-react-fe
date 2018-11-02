@@ -19,7 +19,7 @@ const UserLanding = (props) => {
                 />
                 <ConfirmGames 
                     myAddress={props.myAddress} 
-                    getAllGamesOfAddress={props.getAllGamesOfAddress}
+                    // getAllGamesOfAddress={props.getAllGamesOfAddress}
                     gameCount={props.gameCount}
                     allGames={props.allGames}
                 />
