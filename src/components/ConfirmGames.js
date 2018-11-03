@@ -10,7 +10,7 @@ const ConfirmGames = (props) => {
     function getMyUnconfirmedGames() {
         myUnconfirmedGames = [];
         for (let i=0; i<props.allGames.length; i++) {
-            if(props.allGames[i][0] === myAddress && props.allGames[i][7] === false)  {
+            if(props.allGames[i][1] === myAddress && props.allGames[i][7] === false)  {
                 myUnconfirmedGames.push(props.allGames[i]);
                 console.log("props of allGames[i]", props.allGames[i])
             }
