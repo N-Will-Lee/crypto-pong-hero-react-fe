@@ -3,6 +3,7 @@ import './App.css';
 import { Router, Link } from "@reach/router";
 import UserLanding from './components/UserLanding';
 import LiveGame from './components/LiveGame';
+import Profile from './components/Profile';
 
 class App extends Component {
   constructor (props) {
@@ -274,7 +275,6 @@ class App extends Component {
     this.declareCreatorWinner = this.declareCreatorWinner.bind (this);
     this.declareOpponentWinner = this.declareOpponentWinner.bind (this);
     this.getPlayerGameCount = this.getPlayerGameCount.bind (this);
-    // this.getAllGamesOfAddress = this.getAllGamesOfAddress.bind (this);
     this.handleTotalGameNumber = this.handleTotalGameNumber.bind(this);
     this.getGameinformation = this.getGameinformation.bind (this);
     this.handleGameInformation = this.handleGameInformation.bind (this);
@@ -324,42 +324,16 @@ class App extends Component {
     });
   }
 
-//works
-  submitGame(event)  {
-    event.preventDefault();
-    const { _finish } = this.state.ContractInstance;
-    _finish(
-      this.state.creatorWalletAddress,
-      this.state.oppWalletAddress,
-      this.state.winner,
-      this.state.creatorScore,
-      this.state.oppScore,
-      this.state.wager,
-      1541029968,
-      {
-        gas: 3000000,
-        from: window.web3.eth.accounts[0],
-        value: window.web3.toWei (this.state.wager, 'ether')
-        //code below is for trying to handle sending wagers in decimals.  not sure if the acutal send (below) or the 
-        //this.state.wager param in _finish (above) is causing the failed transaction.  likely its _finish b/c solidity code probs cant receive decimal
-        //
-        // value: window.web3.fromWei (this.state.wager*10^18, 'ether')
-      },
-      (err, result) =>  {
-        // console.log("game is being submitted to the blockchain" + JSON.stringify(result));
-      }
-    );
-  }
-
+  
   //works - make sure address has loaded
   getPlayerGameCount() {
     const { playerGameCount } = this.state.ContractInstance;
-
+    
     playerGameCount(
       this.state.creatorWalletAddress,
       (err, result) =>  {
         // console.log("player game count is:" + JSON.stringify(result));
-      });
+    });
   }
   
   //works
@@ -375,18 +349,21 @@ class App extends Component {
       });
     });
   }
+
+  // let gameId = Number(JSON.stringify(props.gameId).substring(1,JSON.stringify(props.gameId).length - 1))
+
   handleTotalGameNumber() {
     this.getTotalGameNumber()
     .then(count => {
-      let newCount = parseInt(JSON.stringify(count)[1])
+      let newCount = parseInt(JSON.stringify(count).substring(1,JSON.stringify(count).length - 1))
       this.setState({gameCount: newCount});
     })
   }
-
+  
   //works
   getGameinformation(int) {
     const { gamesPlayed } = this.state.ContractInstance;
-
+    
     return new Promise((resolve, reject) => {
       gamesPlayed(
         int,
@@ -394,10 +371,10 @@ class App extends Component {
           if (err) return reject(err);
           // console.log("game information for game " + int + " is: " + JSON.stringify(result));
           resolve(result);
-        });
+      });
     })
   }
-  //works - sets state with 'un JSON.stringified' arrays - first 3 indexes are address as strings, last 4 need to be stringified separately.
+  //works
   handleGameInformation(int)  {
     // console.log("gamecount before loop runs: ", this.state.gameCount)
     this.setState({
@@ -415,6 +392,38 @@ class App extends Component {
         })
       })
     }
+  }
+
+  //works
+  submitGame(event)  {
+    event.preventDefault();
+    const { _finish } = this.state.ContractInstance;
+
+    let wagerPaid = this.state.wager;
+    if (this.state.creatorWalletAddress === this.state.winner)  {
+        wagerPaid = 0;
+    }
+    _finish(
+      this.state.creatorWalletAddress,
+      this.state.oppWalletAddress,
+      this.state.winner,
+      this.state.creatorScore,
+      this.state.oppScore,
+      this.state.wager,
+      Date.now(),
+      {
+        gas: 3000000,
+        from: window.web3.eth.accounts[0],
+        value: window.web3.toWei (wagerPaid, 'ether')
+        //code below is for trying to handle sending wagers in decimals.  not sure if the acutal send (below) or the 
+        //this.state.wager param in _finish (above) is causing the failed transaction.  likely its _finish b/c solidity code probs cant receive decimal
+        //
+        // value: window.web3.fromWei (this.state.wager*10^18, 'ether')
+      },
+      (err, result) =>  {
+        // console.log("game is being submitted to the blockchain" + JSON.stringify(result));
+      }
+    );
   }
 
   confirmGame(int) {
@@ -460,6 +469,19 @@ class App extends Component {
     this.testConfirmGame(2)
   }
 
+  timeConverter(UNIX_timestamp){
+    var a = new Date(UNIX_timestamp * 1000);
+    var months = ['1','2','3','4','5','6','7','8','9','10','11','12'];
+    var year = a.getFullYear();
+    var month = months[a.getMonth()];
+    var date = a.getDate();
+    var hour = a.getHours();
+    var min = a.getMinutes();
+    var sec = a.getSeconds();
+    var time = month + '/' + date + '/' + year + ' ' + hour + ':' + min;
+    return time;
+  }
+
 
   setOppWalletAddress(address) {
     this.setState({
@@ -503,35 +525,64 @@ class App extends Component {
         <nav>
           <Link to="leaderboard">LeaderBoard</Link>
           <Link to="/">Home</Link>
-          <Link to="Profile">profile</Link>
+          <Link to="/profile">profile</Link>
         </nav>  
-          <Router>
-            <UserLanding  path="/"  
-                          myAddress={this.state.creatorWalletAddress}
+        <Router>
+          <UserLanding  
+            path="/"  
+            myAddress={this.state.creatorWalletAddress}
+            setOppWalletAddress={this.setOppWalletAddress} 
                           setOppWalletAddress={this.setOppWalletAddress} 
+            setOppWalletAddress={this.setOppWalletAddress} 
+            setWager={this.setWager} 
                           setWager={this.setWager} 
-                          // getAllGamesOfAddress={this.getAllGamesOfAddress}
-                          gameCount={this.state.gameCount}
-                          allGames={this.state.allGames}
-                          handleConfirmGame={this.handleConfirmGame}
-                        />
-            <LiveGame path="/game"  
+            setWager={this.setWager} 
+            gameCount={this.state.gameCount}
+            allGames={this.state.allGames}
+            handleConfirmGame={this.handleConfirmGame}
+            timeConverter={this.timeConverter}
+          />
+          <LiveGame 
+            path="/game"  
+            wager={this.state.wager} 
                       wager={this.state.wager} 
+            wager={this.state.wager} 
+            oppWalletAddress={this.state.oppWalletAddress} 
                       oppWalletAddress={this.state.oppWalletAddress} 
+            oppWalletAddress={this.state.oppWalletAddress} 
+            myAddress={this.state.creatorWalletAddress} 
                       myAddress={this.state.creatorWalletAddress} 
+            myAddress={this.state.creatorWalletAddress} 
+            submitGame={this.submitGame} 
                       submitGame={this.submitGame} 
+            submitGame={this.submitGame} 
+            setOppScore={this.setOppScore} 
                       setOppScore={this.setOppScore} 
+            setOppScore={this.setOppScore} 
+            setCreatorScore={this.setCreatorScore} 
                       setCreatorScore={this.setCreatorScore} 
+            setCreatorScore={this.setCreatorScore} 
+            declareCreatorWinner={this.declareCreatorWinner} 
                       declareCreatorWinner={this.declareCreatorWinner} 
+            declareCreatorWinner={this.declareCreatorWinner} 
+            declareOpponentWinner={this.declareOpponentWinner} 
                       declareOpponentWinner={this.declareOpponentWinner} 
-                      winner={this.state.winner}
-                    />
-          </Router>
-          <br />
-          <br />
-          {/* <button type="button" onClick={this.getAllGamesOfAddress}>console log all names of addresss</button> */}
-          <button type="button" onClick={this.handleTestConfirmGame}>testing confirm game for game 2</button>
-          <button type="button" onClick={this.testHandleGameInformation}>handle game info for all games</button>
+            declareOpponentWinner={this.declareOpponentWinner} 
+            winner={this.state.winner}
+          />
+          <Profile 
+            path="/profile"
+            myAddress={this.state.creatorWalletAddress}
+            gameCount={this.state.gameCount}
+            allGames={this.state.allGames}
+            handleConfirmGame={this.handleConfirmGame}
+            timeConverter={this.timeConverter}
+          />
+        </Router>
+        <br />
+        <br />
+        <button type="button" onClick={this.handleTestConfirmGame}>testing confirm game for game 2</button>
+        <button type="button" onClick={this.testHandleGameInformation}>handle game info for all games</button>
       </div>
     );
   }
@@ -541,25 +592,8 @@ export default App;
 
 
 
-// submitGame={this.submitGame} myAddress={window.web3.eth.accounts[0]}
+
 
 // 0x5ed8cee6b63b1c6afce3ad7c92f4fd7e1b8fad9f
 
-// setCreatorScore={this.setCreatorScore} setOpponentScore={this.setOpponentScore}
 
-
-
-  //Front end functions for consolidating data to app.js
-
-  // getAllGamesOfAddress() {
-  //   let gamesWithAddress = [];
-  //   for (let i=0; i<this.state.gameCount; i++) {
-  //     let tempGameInfo = this.state.allGames[i]
-  //     console.log("tempGameInfo is: ", tempGameInfo);
-  //     if((tempGameInfo[0] || tempGameInfo[1]) === this.state.creatorWalletAddress)  {
-  //       gamesWithAddress.push(tempGameInfo);
-  //     }
-  //   }
-  //   console.log("games With My Address are: ", gamesWithAddress);
-  //   return gamesWithAddress;
-  // }

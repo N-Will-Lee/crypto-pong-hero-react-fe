@@ -1,28 +1,28 @@
 import React from 'react';
-import IndividualGame from "./IndividualGame";
+import ProfileGame from "./ProfileGame";
 
 
-const ConfirmGames = (props) => {
+const Profile = (props) => {
     
     let myAddress = props.myAddress;
     let myUnconfirmedGames = [];
 
-    function getMyUnconfirmedGames() {
+    function getMyConfirmedGames() {
         myUnconfirmedGames = [];
         for (let i=0; i<props.allGames.length; i++) {
-            if(props.allGames[i][0] === myAddress && props.allGames[i][7] === false)  {
+            if(props.allGames[i][0] === myAddress || props.allGames[i][1] === myAddress && props.allGames[i][7] === true)  {
                 myUnconfirmedGames.push(props.allGames[i]);
-                console.log("props of allGames[i]", props.allGames[i])
+                console.log("all games for profile list: ", myUnconfirmedGames)
+                console.log("props.allgames is: ", props.allGames)
             }
         }
     }
 
-    getMyUnconfirmedGames();
+    getMyConfirmedGames();
 
     const createList = myUnconfirmedGames.map((type, i) =>  {
         return  (
-            <IndividualGame 
-                key={i}
+            <ProfileGame 
                 creatorWalletAddress={myUnconfirmedGames[i][0]}
                 opponentWalletAddress={myUnconfirmedGames[i][1]}
                 winner={myUnconfirmedGames[i][2]}
@@ -41,7 +41,9 @@ const ConfirmGames = (props) => {
     return(
 
         <div className="newGame">
-            <p>Games To Confirm Accurate</p>
+            <p>
+                <h1>My Confirmed Games</h1>
+            </p>
             <tr>
                 <td>me</td>
                 <td>opponent</td>
@@ -57,4 +59,4 @@ const ConfirmGames = (props) => {
     )
 }
 
-export default ConfirmGames
+export default Profile

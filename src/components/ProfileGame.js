@@ -2,7 +2,7 @@ import React from 'react';
 
 
 
-const IndividualGame = (props) => {
+const ProfileGame = (props) => {
     
     let myAddress = props.creatorWalletAddress.substring(0,5);
     console.log(myAddress);
@@ -34,10 +34,6 @@ const IndividualGame = (props) => {
 
     let gameId = Number(JSON.stringify(props.gameId).substring(1,JSON.stringify(props.gameId).length - 1))
 
-    function handleGameConfirmation()  {
-        props.handleConfirmGame(gameId)
-    }
-
 
     return(
         <tr>
@@ -48,7 +44,6 @@ const IndividualGame = (props) => {
             <td> {oppScore}</td>
             <td> {wager}</td>
             <td> {date}</td>
-            <td> <button type="button" onClick={handleGameConfirmation}>confirm</button></td>
         </tr>
 
     )
@@ -62,5 +57,5 @@ const IndividualGame = (props) => {
 
 
 
-export default IndividualGame
+export default ProfileGame
 
