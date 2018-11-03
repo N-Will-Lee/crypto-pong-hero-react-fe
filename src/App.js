@@ -278,6 +278,8 @@ class App extends Component {
     this.handleTotalGameNumber = this.handleTotalGameNumber.bind(this);
     this.getGameinformation = this.getGameinformation.bind (this);
     this.handleGameInformation = this.handleGameInformation.bind (this);
+    this.confirmGame = this.confirmGame.bind (this);
+    this.handleTestConfirmGame = this.handleTestConfirmGame.bind (this);
   }
 
   componentWillMount() {
@@ -337,9 +339,13 @@ class App extends Component {
         gas: 3000000,
         from: window.web3.eth.accounts[0],
         value: window.web3.toWei (this.state.wager, 'ether')
+        //code below is for trying to handle sending wagers in decimals.  not sure if the acutal send (below) or the 
+        //this.state.wager param in _finish (above) is causing the failed transaction.  likely its _finish b/c solidity code probs cant receive decimal
+        //
+        // value: window.web3.fromWei (this.state.wager*10^18, 'ether')
       },
       (err, result) =>  {
-        console.log("game is being submitted to the blockchain" + JSON.stringify(result));
+        // console.log("game is being submitted to the blockchain" + JSON.stringify(result));
       }
     );
   }
@@ -351,7 +357,7 @@ class App extends Component {
     playerGameCount(
       this.state.creatorWalletAddress,
       (err, result) =>  {
-        console.log("player game count is:" + JSON.stringify(result));
+        // console.log("player game count is:" + JSON.stringify(result));
       });
   }
   
@@ -363,7 +369,7 @@ class App extends Component {
       _getTotalGameNumber(
       (err, result) =>  {
         if (err) return reject(err);
-        console.log("Total Game Number is: " + JSON.stringify(result));
+        // console.log("Total Game Number is: " + JSON.stringify(result));
         resolve(result);
       });
     });
@@ -392,7 +398,7 @@ class App extends Component {
   }
   //works - sets state with 'un JSON.stringified' arrays - first 3 indexes are address as strings, last 4 need to be stringified separately.
   handleGameInformation(int)  {
-    console.log("gamecount before loop runs: ", this.state.gameCount)
+    // console.log("gamecount before loop runs: ", this.state.gameCount)
     this.setState({
       allGames: []
     })
@@ -401,6 +407,7 @@ class App extends Component {
       .then(info => {
         // console.log("actual game information for game " + int + " is: " + info);
         let newArr = this.state.allGames
+        info.push(i)
         newArr.push(info)
         this.setState({
           allGames: newArr
@@ -409,21 +416,40 @@ class App extends Component {
     }
   }
 
+  confirmGame(int) {
+    const { _confirmGame } = this.state.ContractInstance;
+    let dueWager = 0
+    let currentWager = parseInt(JSON.stringify(this.state.allGames[int][5]).substring(1,JSON.stringify(this.state.allGames[int][5]).length - 1));
+    let gameWinner = JSON.stringify(this.state.allGames[int][2]).substring(1, JSON.stringify(this.state.allGames[int][2]).length -1 )
+    if(gameWinner !== window.web3.eth.accounts[0]) {
+        dueWager = currentWager;
+    }
+    return new Promise((resolve, reject) => {
+      _confirmGame(
+        int,
+        {
+          gas: 3000000,
+          from: window.web3.eth.accounts[0],
+          value: window.web3.toWei (dueWager, 'ether')
+        },
+        (err, result) =>  {
+          if (err) return reject(err);
+          console.log("confirmGame result for game " + int + " is: " + JSON.stringify(result));
+          resolve(result);
+        });
+    })
+  }
 
-  //Front end functions for consolidating data to app.js
+  testConfirmGame(int)  {
+    console.log("winner of game is: ", JSON.stringify(this.state.allGames[int][2]).substring(1, JSON.stringify(this.state.allGames[int][2]).length -1 ));
+    console.log("I am: ", window.web3.eth.accounts[0]);
+    console.log("the wager for game " + int + " is: ", parseInt(JSON.stringify(this.state.allGames[int][5]).substring(1,JSON.stringify(this.state.allGames[int][5]).length - 1)));
+  };
 
-  // getAllGamesOfAddress() {
-  //   let gamesWithAddress = [];
-  //   for (let i=0; i<this.state.gameCount; i++) {
-  //     let tempGameInfo = this.state.allGames[i]
-  //     console.log("tempGameInfo is: ", tempGameInfo);
-  //     if((tempGameInfo[0] || tempGameInfo[1]) === this.state.creatorWalletAddress)  {
-  //       gamesWithAddress.push(tempGameInfo);
-  //     }
-  //   }
-  //   console.log("games With My Address are: ", gamesWithAddress);
-  //   return gamesWithAddress;
-  // }
+  handleTestConfirmGame() {
+    this.testConfirmGame(2)
+  }
+
 
   setOppWalletAddress(address) {
     this.setState({
@@ -493,7 +519,7 @@ class App extends Component {
           <br />
           <br />
           {/* <button type="button" onClick={this.getAllGamesOfAddress}>console log all names of addresss</button> */}
-          {/* <button type="button" onClick={this.getGameinformation}>get game information for game 0</button> */}
+          <button type="button" onClick={this.handleTestConfirmGame}>testing confirm game for game 2</button>
           <button type="button" onClick={this.testHandleGameInformation}>handle game info for all games</button>
       </div>
     );
@@ -509,3 +535,20 @@ export default App;
 // 0x5ed8cee6b63b1c6afce3ad7c92f4fd7e1b8fad9f
 
 // setCreatorScore={this.setCreatorScore} setOpponentScore={this.setOpponentScore}
+
+
+
+  //Front end functions for consolidating data to app.js
+
+  // getAllGamesOfAddress() {
+  //   let gamesWithAddress = [];
+  //   for (let i=0; i<this.state.gameCount; i++) {
+  //     let tempGameInfo = this.state.allGames[i]
+  //     console.log("tempGameInfo is: ", tempGameInfo);
+  //     if((tempGameInfo[0] || tempGameInfo[1]) === this.state.creatorWalletAddress)  {
+  //       gamesWithAddress.push(tempGameInfo);
+  //     }
+  //   }
+  //   console.log("games With My Address are: ", gamesWithAddress);
+  //   return gamesWithAddress;
+  // }
