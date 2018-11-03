@@ -29,7 +29,9 @@ const ConfirmGames = (props) => {
                 opponentScore={myUnconfirmedGames[i][4]}
                 wager={myUnconfirmedGames[i][5]}
                 time={myUnconfirmedGames[i][6]}
-                confirmed={myUnconfirmedGames[i][7]}  
+                confirmed={myUnconfirmedGames[i][7]}
+                gameId={myUnconfirmedGames[i][8]}
+                handleConfirmGame={props.handleConfirmGame}  
             />
         )
     })
@@ -50,7 +52,7 @@ const ConfirmGames = (props) => {
                 <td>complete button here</td>
             </tr>
             {createList}
-            <button type="button" onClick={createList}>show all games including me</button>
+            {/* <button type="button" onClick={createList}>show all games including me</button> */}
  
         </div>
     )

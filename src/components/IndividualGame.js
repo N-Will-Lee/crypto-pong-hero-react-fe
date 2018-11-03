@@ -30,7 +30,11 @@ const IndividualGame = (props) => {
     let confirmed = JSON.stringify(props.confirmed);
     console.log(confirmed);
 
+    let gameId = Number(JSON.stringify(props.gameId).substring(1,JSON.stringify(props.gameId).length - 1))
 
+    function handleGameConfirmation()  {
+        props.handleConfirmGame(gameId)
+    }
 
 
     return(
@@ -42,7 +46,8 @@ const IndividualGame = (props) => {
             <td> {oppScore}</td>
             <td> {wager}</td>
             <td> {time}</td>
-            <td> {confirmed}</td>
+            <td> <button type="button" onClick={handleGameConfirmation}>confirm</button></td>
+
         </tr>
 
     )

@@ -279,6 +279,7 @@ class App extends Component {
     this.getGameinformation = this.getGameinformation.bind (this);
     this.handleGameInformation = this.handleGameInformation.bind (this);
     this.confirmGame = this.confirmGame.bind (this);
+    this.handleConfirmGame = this.handleConfirmGame.bind (this);
     this.handleTestConfirmGame = this.handleTestConfirmGame.bind (this);
   }
 
@@ -439,6 +440,15 @@ class App extends Component {
         });
     })
   }
+  handleConfirmGame(int)  {
+    let newArr = this.state.allGames
+    newArr[int][7] = true
+    this.confirmGame(int).then(
+      this.setState({
+        allGames: newArr
+      })
+    )
+  }
 
   testConfirmGame(int)  {
     console.log("winner of game is: ", JSON.stringify(this.state.allGames[int][2]).substring(1, JSON.stringify(this.state.allGames[int][2]).length -1 ));
@@ -503,6 +513,7 @@ class App extends Component {
                           // getAllGamesOfAddress={this.getAllGamesOfAddress}
                           gameCount={this.state.gameCount}
                           allGames={this.state.allGames}
+                          handleConfirmGame={this.handleConfirmGame}
                         />
             <LiveGame path="/game"  
                       wager={this.state.wager} 
