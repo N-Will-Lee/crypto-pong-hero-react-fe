@@ -4,20 +4,25 @@ import React from 'react';
 
 const IndividualGame = (props) => {
     
-    let myAddress = props.creatorWalletAddress.substring(0,5);
+    // let myAddress = props.creatorWalletAddress.substring(0,5);
+    let myAddress = props.opponentWalletAddress.substring(0,5);
     // console.log(myAddress);
 
-    let oppAddress = props.opponentWalletAddress.substring(0,5);
+    // let oppAddress = props.opponentWalletAddress.substring(0,5);
+    let oppAddress = props.creatorWalletAddress.substring(0,5);
     // console.log(oppAddress);
 
     let winner = props.winner.substring(0,5);
     // console.log(winner);
 
-    let crScore = Number(JSON.stringify(props.creatorScore).substring(1,JSON.stringify(props.creatorScore).length - 1));
+    // let crScore = Number(JSON.stringify(props.creatorScore).substring(1,JSON.stringify(props.creatorScore).length - 1));
+    let oppScore = Number(JSON.stringify(props.creatorScore).substring(1,JSON.stringify(props.creatorScore).length - 1));
+
     // console.log(crScore);
     
     
-    let oppScore = Number(JSON.stringify(props.opponentScore).substring(1,JSON.stringify(props.opponentScore).length - 1));
+    // let oppScore = Number(JSON.stringify(props.opponentScore).substring(1,JSON.stringify(props.opponentScore).length - 1));
+    let crScore = Number(JSON.stringify(props.opponentScore).substring(1,JSON.stringify(props.opponentScore).length - 1));
     // console.log("props.opponentScore.length ", JSON.stringify(props.opponentScore).length)
     // console.log(oppScore);
 
