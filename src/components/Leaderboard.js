@@ -52,7 +52,7 @@ const Leaderboard = (props) => {
             userRanking.push(winsLossesTotal[2]);
             userRanking.push(winsLossesTotal[0]);
             userRanking.push(winsLossesTotal[1]);
-            let wLRatio = winsLossesTotal[0]/winsLossesTotal[1];
+            let wLRatio = Number.parseFloat(winsLossesTotal[0]/winsLossesTotal[1]).toFixed(2);
             userRanking.push(wLRatio);
 
             userRankings.push(userRanking);
