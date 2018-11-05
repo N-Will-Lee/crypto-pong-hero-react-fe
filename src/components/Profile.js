@@ -55,7 +55,8 @@ const Profile = (props) => {
     })
 
     let winsLossesTotal = props.countWinsLossesTotal(myAddress);
-    let wLRatio = winsLossesTotal[0]/winsLossesTotal[1];
+    let wLRatio = Number.parseFloat(winsLossesTotal[0]/winsLossesTotal[1]).toFixed(2);
+    
 
     return(
 
