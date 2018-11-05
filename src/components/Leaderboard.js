@@ -67,6 +67,7 @@ const Leaderboard = (props) => {
             <PlayerRank 
                 user={orderedUserRankings[i]} 
                 i={i}
+                myAddress={props.myAddress}
             />
         )
     })
