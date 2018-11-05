@@ -12,7 +12,16 @@ const IndividualGame = (props) => {
     let oppAddress = props.creatorWalletAddress.substring(0,5);
     // console.log(oppAddress);
 
-    let winner = props.winner.substring(0,5);
+    let winnerAddress = props.winner.substring(0,5);
+    function winnerName()   {
+        if(winnerAddress === myAddress) {
+            return "Me";
+        }
+        if(winnerAddress === oppAddress) {
+            return "Opponent";
+        }
+    }
+
     // console.log(winner);
 
     // let crScore = Number(JSON.stringify(props.creatorScore).substring(1,JSON.stringify(props.creatorScore).length - 1));
@@ -26,8 +35,9 @@ const IndividualGame = (props) => {
     // console.log("props.opponentScore.length ", JSON.stringify(props.opponentScore).length)
     // console.log(oppScore);
 
-    let wager = Number(JSON.stringify(props.wager).substring(1,2));
-    // console.log(wager);
+    let weiWager = Number(JSON.stringify(props.wager).substring(1, JSON.stringify(props.wager).length-1));
+    let wager = window.web3.fromWei(weiWager, 'ether');
+    // console.log("wager hopefully decimal is: ",wager);
 
     let time = Number(JSON.stringify(props.time).substring(1,11));
     // console.log(time);
@@ -48,7 +58,7 @@ const IndividualGame = (props) => {
         <tr>
             <td> {myAddress}</td>
             <td> {oppAddress}</td>
-            <td> {winner}</td>
+            <td> {winnerName()}</td>
             <td> {crScore}</td>
             <td> {oppScore}</td>
             <td> {wager}</td>

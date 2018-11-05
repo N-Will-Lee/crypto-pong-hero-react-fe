@@ -6,6 +6,7 @@ const ConfirmGames = (props) => {
     
     let myAddress = props.myAddress;
     let myUnconfirmedGames = [];
+    let orderedUnconfirmedGames = [];
 
     function getMyUnconfirmedGames() {
         myUnconfirmedGames = [];
@@ -15,11 +16,25 @@ const ConfirmGames = (props) => {
                 // console.log("props of allGames[i]", props.allGames[i])
             }
         }
+        orderedUnconfirmedGames = myUnconfirmedGames.sort(compare);
     }
+
+    function compare(a, b) {
+        const timeA = Number(JSON.stringify(a[6]).substring(1,11))
+        const timeB = Number(JSON.stringify(b[6]).substring(1,11))
+      
+        let comparison = 0;
+        if (timeA > timeB) {
+          comparison = 1;
+        } else if (timeA < timeB) {
+          comparison = -1;
+        }
+        return comparison * -1;
+      }
 
     getMyUnconfirmedGames();
 
-    const createList = myUnconfirmedGames.map((type, i) =>  {
+    const createList = orderedUnconfirmedGames.map((type, i) =>  {
         return  (
             <IndividualGame 
                 key={i}
@@ -48,7 +63,7 @@ const ConfirmGames = (props) => {
                 <td>winner</td>
                 <td>my score</td>
                 <td>their score</td>
-                <td>wager</td>
+                <td>wager (ether)</td>
                 <td>time</td>
                 <td>confirm</td>
             </tr>

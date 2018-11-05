@@ -4,6 +4,7 @@ import { Router, Link } from "@reach/router";
 import UserLanding from './components/UserLanding';
 import LiveGame from './components/LiveGame';
 import Profile from './components/Profile';
+import Leaderboard from './components/Leaderboard';
 
 class App extends Component {
   constructor (props) {
@@ -251,7 +252,7 @@ class App extends Component {
     ]);
 
     this.state = {
-      ContractInstance: CryptoPongHero.at ('0x6A4471F9584150822C248B8370A47398527f66Be'),
+      ContractInstance: CryptoPongHero.at ('0x78318B219D0B3a608E9ad0F5Af5AC5dF5b9dE635'),
       userName: "",
       creatorWalletAddress: window.web3.eth.accounts[0],
       oppWalletAddress: "",
@@ -260,7 +261,8 @@ class App extends Component {
       oppScore: 0,
       wager: 2,
       allGames: [],
-      gameCount: 0
+      gameCount: 0,
+      confirmedGames: []
 
     }
 
@@ -280,6 +282,10 @@ class App extends Component {
     this.handleGameInformation = this.handleGameInformation.bind (this);
     this.confirmGame = this.confirmGame.bind (this);
     this.handleConfirmGame = this.handleConfirmGame.bind (this);
+    this.countWinsLossesTotal = this.countWinsLossesTotal.bind (this);
+    this.getAllConfirmedGames = this.getAllConfirmedGames.bind (this);
+
+    // this.testHandleGameInformation = this.testHandleGameInformation.bind (this);
   }
 
   componentWillMount() {
@@ -407,18 +413,23 @@ class App extends Component {
     if (this.state.creatorWalletAddress === this.state.winner)  {
         wagerPaid = 0;
     }
+    let weiWager = this.state.wager*Math.pow(10, 18)
+    console.log("weiWager is (sending this currently): ", weiWager)
+    console.log("wagerPaid is: ", wagerPaid)
+    console.log("window.web3.toWei(wagerPaid)", window.web3.toWei(wagerPaid, 'ether'))
+
     _finish(
       this.state.creatorWalletAddress,
       this.state.oppWalletAddress,
       this.state.winner,
       this.state.creatorScore,
       this.state.oppScore,
-      this.state.wager,
+      weiWager,
       Date.now(),
       {
         gas: 3000000,
         from: window.web3.eth.accounts[0],
-        value: window.web3.toWei (wagerPaid, 'ether')
+        value: window.web3.toWei(wagerPaid, 'ether')
         //code below is for trying to handle sending wagers in decimals.  not sure if the acutal send (below) or the 
         //this.state.wager param in _finish (above) is causing the failed transaction.  likely its _finish b/c solidity code probs cant receive decimal
         //
@@ -453,7 +464,7 @@ class App extends Component {
         {
           gas: 3000000,
           from: window.web3.eth.accounts[0],
-          value: window.web3.toWei (dueWager, 'ether')
+          value: dueWager
         },
         (err, result) =>  {
           if (err) return reject(err);
@@ -464,16 +475,54 @@ class App extends Component {
     })
   }
   handleConfirmGame(int)  {
+    console.log("gameId coming in is: ", int)
+    let activeGameNumber = 0;
+    for(let i=0; i<this.state.gameCount; i++) {
+      if(this.state.allGames[i][8] === int) {
+        activeGameNumber = i;
+      }
+    }
+    console.log("active game number going to change state to true is: ", activeGameNumber)
+    console.log("because activegame number has gameId: ", this.state.allGames[activeGameNumber][8]);
+
     let newArr = this.state.allGames
-    newArr[int][7] = true
-    this.confirmGame(int).then(
-      this.setState({
-        allGames: newArr
-      })
-    )
+    newArr[activeGameNumber][7] = true
+    this.setState({
+      allGames: newArr
+    })
+    this.confirmGame(int).then((result) =>  {
+      console.log(result);
+    })
   }
 
+  countWinsLossesTotal(address) {
+    let confirmedGamesArray = this.getAllConfirmedGames()
+    let wins = 0;
+    let losses = 0;
+    let total = 0;
+    for (let i=0; i<confirmedGamesArray.length; i++)  {
+      if (confirmedGamesArray[i][2] === address) {
+        wins++;
+        total++;
+      }
+      if (((confirmedGamesArray[i][0] || confirmedGamesArray[i][1]) === address) && confirmedGamesArray[i][2] !== address) {
+        losses++;
+        total++;
+      }
+    }
+    return [wins, losses, total];
+  }
 
+  getAllConfirmedGames()  {
+    let confirmedGamesArray = [];
+    for (let i=0; i<this.state.allGames.length; i++)  {
+      if (this.state.allGames[i][7] === true) {
+        confirmedGamesArray.push(this.state.allGames[i])
+      }
+    }
+    return confirmedGamesArray;
+  }
+  
   timeConverter(UNIX_timestamp){
     var a = new Date(UNIX_timestamp * 1000);
     var months = ['1','2','3','4','5','6','7','8','9','10','11','12'];
@@ -486,8 +535,8 @@ class App extends Component {
     var time = month + '/' + date + '/' + year + ' ' + hour + ':' + min;
     return time;
   }
-
-
+  
+  
   setOppWalletAddress(address) {
     this.setState({
       oppWalletAddress: address 
@@ -518,9 +567,18 @@ class App extends Component {
       winner: this.state.oppWalletAddress
     });
   }
+  
+  // testHandleGameInformation() {
+  //   const {gameToHomePlayer} = this.state.ContractInstance;
+  //   gameToHomePlayer(
+  //     2,
+  //     (err, result) =>  {
+  //     console.log("gameId 0 information: " + JSON.stringify(result));
+  //   });
+  // }
 
-
-
+  
+  
   render() {
     return (
       <div className="App">
@@ -562,12 +620,19 @@ class App extends Component {
             allGames={this.state.allGames}
             handleConfirmGame={this.handleConfirmGame}
             timeConverter={this.timeConverter}
+            countWinsLossesTotal={this.countWinsLossesTotal}
+          />
+          <Leaderboard
+            path="/leaderboard"
+            getAllConfirmedGames={this.getAllConfirmedGames}
+            countWinsLossesTotal={this.countWinsLossesTotal}
+            myAddress={this.state.creatorWalletAddress}
           />
         </Router>
         <br />
         <br />
         {/* <button type="button" onClick={this.handleTestConfirmGame}>testing confirm game for game 2</button> */}
-        <button type="button" onClick={this.testHandleGameInformation}>handle game info for all games</button>
+        {/* <button type="button" onClick={this.testHandleGameInformation}>get creator address for gameID 0</button> */}
       </div>
     );
   }
