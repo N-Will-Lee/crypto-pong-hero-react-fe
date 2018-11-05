@@ -14,7 +14,7 @@ class CreateGame extends Component {
 
     render() {
         return(
-            <form className="newGame">
+            <form className="createGame">
                 <p> Create a new Game!</p>
                 <p>
                     <label>My Wallet Address: {this.props.myAddress}</label>

@@ -475,15 +475,15 @@ class App extends Component {
     })
   }
   handleConfirmGame(int)  {
-    console.log("gameId coming in is: ", int)
+    // console.log("gameId coming in is: ", int)
     let activeGameNumber = 0;
     for(let i=0; i<this.state.gameCount; i++) {
       if(this.state.allGames[i][8] === int) {
         activeGameNumber = i;
       }
     }
-    console.log("active game number going to change state to true is: ", activeGameNumber)
-    console.log("because activegame number has gameId: ", this.state.allGames[activeGameNumber][8]);
+    // console.log("active game number going to change state to true is: ", activeGameNumber)
+    // console.log("because activegame number has gameId: ", this.state.allGames[activeGameNumber][8]);
 
     let newArr = this.state.allGames
     newArr[activeGameNumber][7] = true
@@ -631,8 +631,6 @@ class App extends Component {
         </Router>
         <br />
         <br />
-        {/* <button type="button" onClick={this.handleTestConfirmGame}>testing confirm game for game 2</button> */}
-        {/* <button type="button" onClick={this.testHandleGameInformation}>get creator address for gameID 0</button> */}
       </div>
     );
   }
