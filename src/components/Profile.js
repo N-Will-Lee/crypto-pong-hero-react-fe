@@ -75,9 +75,9 @@ const Profile = (props) => {
                         <th>me</th>
                         <th>opponent</th>
                         <th>winner</th>
-                        <th>my score</th>
-                        <th>their score</th>
-                        <th>wager (ether)</th>
+                        <th>score</th>
+                        {/* <th>their score</th> */}
+                        <th>wager (eth)</th>
                         <th>time</th>
                     </tr>
                 </thead>

@@ -26,11 +26,12 @@
 
 .newGame  {
   background-color: #27344e;
-  /* background-image: url(./assets/background.jpg); */
-  color: white;
-  align-items: center;
   height: 100%;
-  width: 1000px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
 }
 
 @keyframes App-logo-spin {
@@ -68,11 +69,7 @@ th, td, tr{
   width:50px;
 }
 Table {
-  /* table-layout: fixed; */
   width: 100%;
-  /* border-collapse: collapse; */
-  /* border: 3px solid purple; */
-  /* display: flex; */
   align-self: center;
 }
 .confirmGames {
@@ -81,14 +78,24 @@ Table {
   flex-direction: column;
   text-align: center;
   align-items: center;
-  /* display: flex; */
-  /* justify-content: center; */
 }
 .createGames  {
   color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: auto;
+}
+.createGamesChild {
+  display: flex;
+  margin: 5px;
+  flex-direction: column;
+}
+.createGamesButton {
+  display: flex;
+  margin-top: 15px;
+  margin-bottom: 40px;
+  flex-direction: column;
 }
 
 .liveGame {
@@ -98,7 +105,6 @@ Table {
 
 
 .liveGameTable {
-  /* background-color: #27344e; */
   background-image: url(./assets/clean-green-table1.jpg);
   background-repeat: no-repeat;
   background-size: 40% fixed;
