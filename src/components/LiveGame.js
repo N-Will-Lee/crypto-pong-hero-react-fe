@@ -9,7 +9,8 @@ class LiveGame extends Component {
     this.state = {
         showMyButton: false,
         showOppButton: false,
-        showSubmit: false,
+        showMeSubmit: false,
+        showOppSubmit: false,
         myScore: 0,
         opponentScore: 0,
 
@@ -34,8 +35,9 @@ class LiveGame extends Component {
     if (event.target.value !== "21")  {
       this.setState({
         showMyButton: false,
-        showSubmit: false
+        showMeSubmit: false
       })
+      this.props.declareCreatorWinner("")
     }
   }
 
@@ -54,28 +56,30 @@ class LiveGame extends Component {
     if (event.target.value !== "21")  {
       this.setState({
         showOppButton: false,
-        showSubmit: false
+        showOppSubmit: false,
       })
+      this.props.declareOpponentWinner("")
     }
   }
 
 
   handleMeWinner(event) {
     event.preventDefault();
-    this.props.declareCreatorWinner();
+    let myAddress = this.props.myAddress
+    this.props.declareCreatorWinner(myAddress);
       if (this.isAddress(this.props.myAddress)) {
       this.setState({
-        showSubmit: true
+        showMeSubmit: true
       })
     }
   }
 
   handleOppWinner(event) {
     event.preventDefault();
-    this.props.declareOpponentWinner();
+    this.props.declareOpponentWinner(this.props.oppWalletAddress);
     if (this.isAddress(this.props.oppWalletAddress)) {
       this.setState({
-        showSubmit: true
+        showOppSubmit: true
       })
     }
   }
@@ -93,74 +97,58 @@ class LiveGame extends Component {
 
   render() {
     return(
-      <div className="liveGame">
+      <div className="liveGameComponent">
         <h3>Game Time</h3>
-        <Label type="text" or="wager">Wager Amount (eth): {this.props.wager}</Label>
-        <br/>
-        <div className="liveGameTable">
-        
-        <div id="flex-opponent">
-          <div id="flex-opponent-child1">
-            <Label type="text" for="opponent"><h4>Opponent: {this.props.oppWalletAddress}</h4></Label>
+        <h5>Wager (eth): {this.props.wager}</h5>
+        {/* <div className="submitGame">
+          {this.state.showSubmit ? <p><h3> Winner: </h3> <h5>{this.props.winner} </h5></p> : null}
+          {this.state.showSubmit ? <Button color="primary" type="button" onClick={this.props.submitGame}>Submit Result</Button> : null}
+        </div> */}
+        <div className="liveGame">
+          
+          <div className="leftOfGameTable">
+            <div id="flex-opponent-child1">
+              <h3>Opponent: </h3><h5>{this.props.oppWalletAddress}</h5>
+            </div>
+            <div id="flex-opponent-child2">
+              Their Score:
+              <Input id="opponent-score" type="text"  name="oppScore" value={this.state.opponentScore} onChange={this.handleOppScore} />
+            </div>
+            <div className="submitGameWinner">
+              {this.state.showOppSubmit ? <h3> Winner! </h3>  : null}
+              {this.state.showOppSubmit ? <Button color="primary" type="button" onClick={this.props.submitGame}>Submit Result</Button> : null}
+            </div>
           </div>
-          <div id="flex-opponent-child2">
-            <Label for="oppScore">Their Score:  </Label>
-            <Input id="opponent-score" type="text"  name="oppScore" value={this.state.opponentScore} onChange={this.handleOppScore} />
+          
+          <div className="liveGameTable">
+            <div id="flex-opponent">
+                {this.state.showOppButton ? <Button  type="button" color="warning" onClick={this.handleOppWinner}>Opponent won</Button> : null}
+            </div>
+            <div id="flex-me">
+                {this.state.showMyButton ? <Button color="success" type="button" onClick={this.handleMeWinner}>I won!</Button> : null}
+            </div>
           </div>
-          <br/>
-          <div id="flex-opponent-child3">
-            {this.state.showOppButton ? <Button type="button" onClick={this.handleOppWinner}>Away Team won!</Button> : null}
-          </div>
-        </div>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <div id="flex-me">
-          <div id="flex-me-child1">
-            <Label type="text" for="Me"><h4>Me: </h4><br/>{this.props.myAddress}</Label>
-          </div>
-          <div id="flex-me-child2">
-            <Label for="homeScore">My Score:  </Label>
-            <Input id="home-score" type="text" name="homeScore" placeholder="Ex: 0.03" value={this.state.myScore} onChange={this.handleMyScore} />            
-          </div>
-          <br/>
-          <div id="flex-me-child3">
-            {this.state.showMyButton ? <Button type="button" onClick={this.handleMeWinner}>Home Team won!</Button> : null}
-          </div>
-        </div>
-          {/* <Label for="winner">winner: {this.props.winner} </Label> */}
-            {/* {this.state.showMyButton ? <Button type="button" onClick={this.handleMeWinner}>Home Team won!</Button> : null} */}
-            {/* {this.state.showOppButton ? <Button type="button" onClick={this.handleOppWinner}>Away Team won!</Button> : null} */}
-          <br/>
-      </div>
-      <Label for="winner">winner: {this.props.winner} </Label>
-      {this.state.showSubmit ? <Button type="button" onClick={this.props.submitGame}>Submit Result</Button> : null}
-    </div> 
-        
-        /* <form className="liveGameForm" onSubmit={this.props.submitGame}>
-            <p> Create a new Game!</p>
-            <label>My Wallet Address: {this.props.myAddress}</label>
-            <br/>
-            <label htmlFor="opponent">Opponent Wallet Address: {this.props.oppWalletAddress}</label>
-            <br />
-            <label htmlFor="wager">Wager Amount (eth): {this.props.wager}</label>
-            <br />
-            <label htmlFor="homeScore">My Score:  </label>
-            <input type="text" name="homeScore" value={this.state.myScore} onChange={this.handleMyScore}/>
-            <br />
-            <label htmlFor="oppScore">Opponent Score:  </label>
-            <input type="text" name="oppScore" value={this.state.opponentScore} onChange={this.handleOppScore}/>
-            <br/>
-            <label htmlFor="winner">winner: {this.props.winner} </label>
-            <br/>
-            {this.state.showMyButton ? <button type="button" onClick={this.handleMeWinner}>Home Team won!</button> : null}
-            {this.state.showOppButton ? <button type="button" onClick={this.handleOppWinner}>Away Team won!</button> : null}
-            <br/>
 
-            {this.state.showSubmit ? <input type="submit" name="submit" value="Submit Results" /> : null}
-        </form> */
+          <div className="rightOfGameTable">
+            <div id="flex-me-child1">
+              <h3>Me: </h3><h5>{this.props.myAddress}</h5>
+            </div>
+            <div id="flex-me-child2">
+              My Score:  
+              <Input id="home-score" type="text" name="homeScore" value={this.state.myScore} onChange={this.handleMyScore} /> 
+            </div>
+            <div className="submitGameWinner">
+              {this.state.showMeSubmit ? <h3> I Won! </h3>  : null}
+              {this.state.showMeSubmit ? <Button color="primary" type="button" onClick={this.props.submitGame}>Submit Result</Button> : null}
+            </div>
+          </div>
+
+        </div>
+        {/* <div className="submitGame">
+          {this.state.showSubmit ? <h3> Winner: {this.props.winner} </h3> : null}
+          {this.state.showSubmit ? <Button color="primary" type="button" onClick={this.props.submitGame}>Submit Result</Button> : null}
+        </div> */}
+      </div> 
     )
   }
 }

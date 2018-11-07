@@ -587,15 +587,19 @@ class App extends Component {
       creatorScore: int 
     })
   }
-  declareCreatorWinner()  {
+  declareCreatorWinner(address)  {
+    console.log("address sent to creatorWinner in appjs is: ", address)
     this.setState({
-      winner: window.web3.eth.accounts[0]
+      winner: address
     })
+    console.log("this.state.winner is:", this.state.winner)
   }
-  declareOpponentWinner()  {
+  declareOpponentWinner(address)  {
+    console.log("address sent to oppwinner in appjs is: ", address)
     this.setState({
-      winner: this.state.oppWalletAddress
+      winner: address
     });
+    console.log("this.state.winner is:", this.state.winner)
   }
   
   
