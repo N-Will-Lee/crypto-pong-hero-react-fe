@@ -19,28 +19,28 @@ class CreateGame extends Component {
                 <br/>
                 <h3>Start A New Game!</h3>
                 <br/>
-                <Form>
+                {/* <Form>
                     <Row>
                         <Col sm={{ size: 6, order: 2, offset: 3 }}>
-                            <FormGroup>
+                            <FormGroup> */}
                                 {/* <label htmlFor="opponent">Opponent Wallet Address: </label>
                                 <input type="text" name="opponent" onChange={event => this.props.setOppWalletAddress(event.target.value)} /> */}
                                 <Label for="opponent">Opponent Wallet Address</Label>
                                 <Input  id="opponent-input" name="opponent" placeholder="Example: 0x93ec3eebdd0ee8d4a0144316da27eca11a25fbee" onChange={event => this.props.setOppWalletAddress(event.target.value)} />
-                            </FormGroup>
+                            {/* </FormGroup>
                         </Col>
                     </Row>
                     <Row>
                         <Col sm={{ size: 6, order: 2, offset: 3 }}>
-                            <FormGroup>
+                            <FormGroup> */}
                                 {/* <label htmlFor="wager">Wager Amount (eth): </label>
                                 <input type="text" name="wager" onChange={event => this.props.setWager(event.target.value)}/> */}
                                 <Label for="wager">Wager Amount (eth)</Label>
                                 <Input id="wager-input"  name="wager" placeholder="Ex: 0.03" onChange={event => this.props.setWager(event.target.value)} />
-                            </FormGroup>
+                            {/* </FormGroup>
                         </Col>
                     </Row>
-                </Form>
+                </Form> */}
                 {/* <Button primary><Link id="link" to="/game">Start Game</Link></Button> */}
                 <Link id={"link"} to="/game">Start Game</Link>
                 <br/>

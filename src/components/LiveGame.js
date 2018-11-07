@@ -96,11 +96,12 @@ class LiveGame extends Component {
       <div className="liveGame">
         <h3>Game Time</h3>
         <Label type="text" or="wager">Wager Amount (eth): {this.props.wager}</Label>
-        <div className="liveGameTable">
         <br/>
+        <div className="liveGameTable">
+        
         <div id="flex-opponent">
           <div id="flex-opponent-child1">
-            <Label type="text" for="opponent"><h4>Opponent: </h4><br/>{this.props.oppWalletAddress}</Label>
+            <Label type="text" for="opponent"><h4>Opponent: {this.props.oppWalletAddress}</h4></Label>
           </div>
           <div id="flex-opponent-child2">
             <Label for="oppScore">Their Score:  </Label>

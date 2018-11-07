@@ -84,6 +84,9 @@ Table {
 }
 .createGames  {
   color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .liveGame {
@@ -99,7 +102,7 @@ Table {
   background-size: 40% fixed;
   background-position: center top;
   background-position-y: 40px;
-  padding-top: 15px;
+  margin-top: 30px;
   color: white;
   text-align: center;
   align-items: center;
@@ -118,6 +121,7 @@ Table {
 #flex-opponent-child1  {
   display: flex;
   align-self: center;
+  flex-direction: row;
 }
 #flex-opponent-child2  {
   display: flex;
