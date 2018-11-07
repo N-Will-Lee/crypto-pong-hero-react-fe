@@ -77,10 +77,12 @@ Table {
 }
 .confirmGames {
   color: white;
-  /* text-align: center;
-  align-items: center; */
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
   /* display: flex; */
-  justify-content: center;
+  /* justify-content: center; */
 }
 .createGames  {
   color: white;
