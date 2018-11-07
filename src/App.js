@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
-import './App.css';
 import { Router, Link } from "@reach/router";
 import UserLanding from './components/UserLanding';
 import LiveGame from './components/LiveGame';
 import Profile from './components/Profile';
 import Leaderboard from './components/Leaderboard';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  Container,
+} from 'reactstrap';
+import './App.css';
+// import { default as Web3} from 'web3'
 
 class App extends Component {
   constructor (props) {
@@ -254,7 +260,7 @@ class App extends Component {
     this.state = {
       ContractInstance: CryptoPongHero.at ('0x78318B219D0B3a608E9ad0F5Af5AC5dF5b9dE635'),
       userName: "",
-      creatorWalletAddress: window.web3.eth.accounts[0],
+      creatorWalletAddress: "loading...",
       oppWalletAddress: "",
       winner: "",
       creatorScore: 0,
@@ -284,19 +290,41 @@ class App extends Component {
     this.handleConfirmGame = this.handleConfirmGame.bind (this);
     this.countWinsLossesTotal = this.countWinsLossesTotal.bind (this);
     this.getAllConfirmedGames = this.getAllConfirmedGames.bind (this);
-
-    // this.testHandleGameInformation = this.testHandleGameInformation.bind (this);
+    this.checkForAddress = this.checkForAddress.bind (this);
   }
 
   componentWillMount() {
+    this.checkForAddress()
     this.handleTotalGameNumber()
   }
+
   componentDidMount() {
     this.delay(500).then(() => { 
       console.log('done');
       this.handleGameInformation()
     })
   }
+
+  componentDidUpdate()  {
+    if (this.state.creatorWalletAddress !== undefined)  {
+      clearInterval(setInterval)
+    }
+  }
+
+  checkForAddress() {
+    var timerid = setInterval(function()  {
+      // console.log("window.web3.eth is: ", window.web3.eth)
+      console.log(window.web3.eth.accounts[0]);
+      if(window.web3.eth.accounts[0]) {
+
+        this.setState({creatorWalletAddress: window.web3.eth.accounts[0]});
+        this.handleTotalGameNumber()
+        this.handleGameInformation()
+        clearInterval(timerid);
+      }
+    }.bind(this), 1000)
+  }
+
 
   delay(millisecs) {
     return new Promise(resolve => {
@@ -453,23 +481,24 @@ class App extends Component {
     let dueWager = 0
     let currentWager = parseInt(JSON.stringify(this.state.allGames[activeGameNumber][5]).substring(1,JSON.stringify(this.state.allGames[activeGameNumber][5]).length - 1));
     let gameWinner = JSON.stringify(this.state.allGames[activeGameNumber][2]).substring(1, JSON.stringify(this.state.allGames[activeGameNumber][2]).length -1 )
-    if(gameWinner !== window.web3.eth.accounts[0]) {
+    if(gameWinner !== this.state.creatorWalletAddress) {
         dueWager = currentWager;
     }
-    // console.log("most current allGames is: ", this.state.allGames )
-    // console.log("sending gameId: " + int + "and wager/gamewinner of allGames index: " + activeGameNumber)
+    console.log("due wager, currentWager, gameWinner, me", dueWager, currentWager, gameWinner, this.state.creatorWalletAddress)
+    console.log("most current allGames is: ", this.state.allGames )
+    console.log("sending gameId: " + int + "and wager/gamewinner of allGames index: " + activeGameNumber)
     return new Promise((resolve, reject) => {
       _confirmGame(
         int,
         {
           gas: 3000000,
-          from: window.web3.eth.accounts[0],
+          from: this.state.creatorWalletAddress,
           value: dueWager
         },
         (err, result) =>  {
           if (err) return reject(err);
-          // console.log("confirmGame result for game " + int + " is: " + JSON.stringify(result));
-          // console.log("error from _confirmGame is: ", err)
+          console.log("confirmGame result for game " + int + " is: " + JSON.stringify(result));
+          console.log("error from _confirmGame is: ", err)
           resolve(result);
         });
     })
@@ -568,67 +597,66 @@ class App extends Component {
     });
   }
   
-  // testHandleGameInformation() {
-  //   const {gameToHomePlayer} = this.state.ContractInstance;
-  //   gameToHomePlayer(
-  //     2,
-  //     (err, result) =>  {
-  //     console.log("gameId 0 information: " + JSON.stringify(result));
-  //   });
-  // }
-
-  
   
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <h1 className="App-title"> Crypto Pong Hero Home</h1>
+          <h1 className="App-title"> Crypto Pong Hero</h1>
         </header>
         <nav>
-          <Link to="leaderboard">LeaderBoard</Link>
+          <Breadcrumb>
+            <BreadcrumbItem><Link to="leaderboard">LeaderBoard</Link></BreadcrumbItem>
+            <BreadcrumbItem><Link to="/">Home</Link></BreadcrumbItem>
+            <BreadcrumbItem><Link to="/profile">profile</Link></BreadcrumbItem>
+            <BreadcrumbItem className="float-right">My Address: {this.state.creatorWalletAddress}</BreadcrumbItem>
+          </Breadcrumb>
+          {/* <h5>My Address: {window.web3.eth.accounts[0]}</h5> */}
+          {/* <Link to="leaderboard">LeaderBoard</Link>
           <Link to="/">Home</Link>
-          <Link to="/profile">profile</Link>
-        </nav>  
-        <Router>
-          <UserLanding  
-            path="/"  
-            myAddress={this.state.creatorWalletAddress}
-            setOppWalletAddress={this.setOppWalletAddress}  
-            setWager={this.setWager} 
-            gameCount={this.state.gameCount}
-            allGames={this.state.allGames}
-            handleConfirmGame={this.handleConfirmGame}
-            timeConverter={this.timeConverter}
-          />
-          <LiveGame 
-            path="/game"  
-            wager={this.state.wager}
-            oppWalletAddress={this.state.oppWalletAddress} 
-            myAddress={this.state.creatorWalletAddress}
-            submitGame={this.submitGame}
-            setOppScore={this.setOppScore}
-            setCreatorScore={this.setCreatorScore} 
-            declareCreatorWinner={this.declareCreatorWinner}
-            declareOpponentWinner={this.declareOpponentWinner}
-            winner={this.state.winner}
-          />
-          <Profile 
-            path="/profile"
-            myAddress={this.state.creatorWalletAddress}
-            gameCount={this.state.gameCount}
-            allGames={this.state.allGames}
-            handleConfirmGame={this.handleConfirmGame}
-            timeConverter={this.timeConverter}
-            countWinsLossesTotal={this.countWinsLossesTotal}
-          />
-          <Leaderboard
-            path="/leaderboard"
-            getAllConfirmedGames={this.getAllConfirmedGames}
-            countWinsLossesTotal={this.countWinsLossesTotal}
-            myAddress={this.state.creatorWalletAddress}
-          />
-        </Router>
+          <Link to="/profile">profile</Link> */}
+        </nav>
+        <Container>
+          <Router>
+            <UserLanding  
+              path="/"  
+              myAddress={this.state.creatorWalletAddress}
+              setOppWalletAddress={this.setOppWalletAddress}  
+              setWager={this.setWager} 
+              gameCount={this.state.gameCount}
+              allGames={this.state.allGames}
+              handleConfirmGame={this.handleConfirmGame}
+              timeConverter={this.timeConverter}
+            />
+            <LiveGame 
+              path="/game"  
+              wager={this.state.wager}
+              oppWalletAddress={this.state.oppWalletAddress} 
+              myAddress={this.state.creatorWalletAddress}
+              submitGame={this.submitGame}
+              setOppScore={this.setOppScore}
+              setCreatorScore={this.setCreatorScore} 
+              declareCreatorWinner={this.declareCreatorWinner}
+              declareOpponentWinner={this.declareOpponentWinner}
+              winner={this.state.winner}
+            />
+            <Profile 
+              path="/profile"
+              myAddress={this.state.creatorWalletAddress}
+              gameCount={this.state.gameCount}
+              allGames={this.state.allGames}
+              handleConfirmGame={this.handleConfirmGame}
+              timeConverter={this.timeConverter}
+              countWinsLossesTotal={this.countWinsLossesTotal}
+            />
+            <Leaderboard
+              path="/leaderboard"
+              getAllConfirmedGames={this.getAllConfirmedGames}
+              countWinsLossesTotal={this.countWinsLossesTotal}
+              myAddress={this.state.creatorWalletAddress}
+            />
+          </Router>
+        </Container>
         <br />
         <br />
       </div>

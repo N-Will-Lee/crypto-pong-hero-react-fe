@@ -1,5 +1,6 @@
 import React from 'react';
 import ProfileGame from "./ProfileGame";
+import { Table } from "reactstrap";
 
 
 const Profile = (props) => {
@@ -61,25 +62,45 @@ const Profile = (props) => {
     return(
 
         <div className="newGame">
-            <p>
+            
                 <h1>My Confirmed Games</h1>
-            </p>
-            <p>
+            
+            {/* <p>
                 <h3>My Address: {props.myAddress}</h3>
-            </p>
-            <tr>
-                <td>me</td>
-                <td>opponent</td>
-                <td>winner</td>
-                <td>my score</td>
-                <td>their score</td>
-                <td>wager (ether)</td>
-                <td>time</td>
+            </p> */}
+
+            <Table dark>
+                <thead>
+                    <tr>
+                        <th>me</th>
+                        <th>opponent</th>
+                        <th>winner</th>
+                        <th>my score</th>
+                        <th>their score</th>
+                        <th>wager (ether)</th>
+                        <th>time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {createList}
+                </tbody>
+            </Table>
+
+
+            {/* <tr>
+                <th>me</th>
+                <th>opponent</th>
+                <th>winner</th>
+                <th>my score</th>
+                <th>their score</th>
+                <th>wager (ether)</th>
+                <th>time</th>
             </tr>
-            {createList}
+            {createList} */}
             <br/>
             <br/>
-            <h5>wins: {winsLossesTotal[0]}  Losses: {winsLossesTotal[1]}    W/L Ratio: {wLRatio}</h5>
+            <h5>wins: {winsLossesTotal[0]}  Losses: {winsLossesTotal[1]} </h5>
+            <h5>W/L Ratio: {wLRatio}</h5>
         </div>
     )
 }

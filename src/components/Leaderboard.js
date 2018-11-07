@@ -1,5 +1,6 @@
 import React from 'react';
 import PlayerRank from "./PlayerRank";
+import { Table } from "reactstrap";
 
 
 
@@ -76,20 +77,33 @@ const Leaderboard = (props) => {
     return(
 
         <div className="newGame">
-            <p>
                 <h1>LeaderBoard</h1>
-            </p>
+            <Table dark>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Player</th>
+                        <th>Games Played</th>
+                        <th>Wins</th>
+                        <th>Losses</th>
+                        <th>Win/Loss Ratio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {createList}
+                </tbody>
+            </Table>
             <br/>
             <br/>
-            <tr>
-                <td>Rank</td>
-                <td>Player</td>
-                <td>Games Played</td>
-                <td>Wins</td>
-                <td>Losses</td>
-                <td>Win/Loss Ratio</td>
+            {/* <tr>
+                <th>Rank</th>
+                <th>Player</th>
+                <th>Games Played</th>
+                <th>Wins</th>
+                <th>Losses</th>
+                <th>Win/Loss Ratio</th>
             </tr>
-            {createList}
+            {createList} */}
             <br/>
             <br/>
         </div>

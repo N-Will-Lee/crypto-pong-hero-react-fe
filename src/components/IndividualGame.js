@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'reactstrap';
 
 
 
@@ -47,23 +48,34 @@ const IndividualGame = (props) => {
     let confirmed = JSON.stringify(props.confirmed);
     // console.log(confirmed);
 
-    let gameId = Number(JSON.stringify(props.gameId).substring(1,JSON.stringify(props.gameId).length - 1))
+    // let gameId = Number(JSON.stringify(props.gameId).substring(1,JSON.stringify(props.gameId).length - 1))
+    let gameId = Number(JSON.stringify(props.gameId))
 
     function handleGameConfirmation()  {
         props.handleConfirmGame(gameId)
+        // console.log("gameId going into app.js function is: ", gameId)
+        // console.log("stringify props.gameId coming into function is: ", JSON.stringify(props.gameId))
     }
 
 
     return(
+
+        // <tr>
+        //     <th scope="row">1</th>
+        //     <td>Mark</td>
+        //     <td>Otto</td>
+        //     <td>@mdo</td>
+        // </tr>
         <tr>
-            <td> {myAddress}</td>
+            <th> {myAddress}</th>
             <td> {oppAddress}</td>
             <td> {winnerName()}</td>
             <td> {crScore}</td>
             <td> {oppScore}</td>
             <td> {wager}</td>
             <td> {date}</td>
-            <td> <button type="button" onClick={handleGameConfirmation}>confirm</button></td>
+            <td>  <Button color="success" type="button" onClick={handleGameConfirmation}>Confirm</Button>{' '}</td>
+            {/* <button type="button" onClick={handleGameConfirmation}>confirm</button></td> */}
         </tr>
 
     )

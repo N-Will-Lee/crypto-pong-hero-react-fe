@@ -1,5 +1,6 @@
 import React from 'react';
 import IndividualGame from "./IndividualGame";
+import { Table } from "reactstrap";
 
 
 const ConfirmGames = (props) => {
@@ -13,10 +14,13 @@ const ConfirmGames = (props) => {
         for (let i=0; i<props.allGames.length; i++) {
             if(props.allGames[i][1] === myAddress && props.allGames[i][7] === false)  {
                 myUnconfirmedGames.push(props.allGames[i]);
+                // console.log("props.allGames.length", props.allGames.length)
                 // console.log("props of allGames[i]", props.allGames[i])
             }
         }
         orderedUnconfirmedGames = myUnconfirmedGames.sort(compare);
+        // console.log("sorted unconfirmed games: ", orderedUnconfirmedGames)
+        // console.log("unordered unconfirmed games: ", myUnconfirmedGames)
     }
 
     function compare(a, b) {
@@ -54,20 +58,25 @@ const ConfirmGames = (props) => {
     })
 
     return(
-
-        <div className="newGame">
-            <p>Games To Confirm Accurate</p>
-            <tr>
-                <td>me</td>
-                <td>opponent</td>
-                <td>winner</td>
-                <td>my score</td>
-                <td>their score</td>
-                <td>wager (ether)</td>
-                <td>time</td>
-                <td>confirm</td>
-            </tr>
-            {createList}
+        <div className="confirmGames">
+            <h3>Confirm Games</h3>
+            <Table dark>
+                <thead>
+                    <tr>
+                        <th>me</th>
+                        <th>opponent</th>
+                        <th>winner</th>
+                        <th>my score</th>
+                        <th>their score</th>
+                        <th>wager (ether)</th>
+                        <th>time</th>
+                        <th>confirm</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {createList}
+                </tbody>
+            </Table>
         </div>
     )
 }

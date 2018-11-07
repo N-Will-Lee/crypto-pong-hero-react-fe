@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Input, Label, Button} from 'reactstrap';
 
 
 class LiveGame extends Component {
@@ -39,8 +40,8 @@ class LiveGame extends Component {
   }
 
   handleOppScore(event) {
-    console.log("event: ", event)
-    console.log("event.target: ", event.target)
+    // console.log("event: ", event)
+    // console.log("event.target: ", event.target)
     this.props.setOppScore(event.target.value);
     this.setState({
       opponentScore: event.target.value
@@ -82,18 +83,62 @@ class LiveGame extends Component {
   //not a great check - misses most things... web3.utils.isAddress('address') is supposed to work great but couldn't get web3 package installed
   isAddress(address) {
     if (!/^(0x)?[0-9a-f]{40}$/i.test(address)) {
-        // check if it has the basic requirements of an address
-        return false;
+      // check if it has the basic requirements of an address
+      return false;
     } else if (/^(0x)?[0-9a-f]{40}$/ || /^(0x)?[0-9A-F]{40}$/) {
-        // If it's all small caps or all all caps, return true
-        return true;
+      // If it's all small caps or all all caps, return true
+      return true;
     } 
   };
 
   render() {
     return(
-      <div>
-        <form className="newGame" onSubmit={this.props.submitGame}>
+      <div className="liveGame">
+        <h3>Game Time</h3>
+        <Label type="text" or="wager">Wager Amount (eth): {this.props.wager}</Label>
+        <div className="liveGameTable">
+        <br/>
+        <div id="flex-opponent">
+          <div id="flex-opponent-child1">
+            <Label type="text" for="opponent"><h4>Opponent: </h4><br/>{this.props.oppWalletAddress}</Label>
+          </div>
+          <div id="flex-opponent-child2">
+            <Label for="oppScore">Their Score:  </Label>
+            <Input id="opponent-score" type="text"  name="oppScore" value={this.state.opponentScore} onChange={this.handleOppScore} />
+          </div>
+          <br/>
+          <div id="flex-opponent-child3">
+            {this.state.showOppButton ? <Button type="button" onClick={this.handleOppWinner}>Away Team won!</Button> : null}
+          </div>
+        </div>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <div id="flex-me">
+          <div id="flex-me-child1">
+            <Label type="text" for="Me"><h4>Me: </h4><br/>{this.props.myAddress}</Label>
+          </div>
+          <div id="flex-me-child2">
+            <Label for="homeScore">My Score:  </Label>
+            <Input id="home-score" type="text" name="homeScore" placeholder="Ex: 0.03" value={this.state.myScore} onChange={this.handleMyScore} />            
+          </div>
+          <br/>
+          <div id="flex-me-child3">
+            {this.state.showMyButton ? <Button type="button" onClick={this.handleMeWinner}>Home Team won!</Button> : null}
+          </div>
+        </div>
+          {/* <Label for="winner">winner: {this.props.winner} </Label> */}
+            {/* {this.state.showMyButton ? <Button type="button" onClick={this.handleMeWinner}>Home Team won!</Button> : null} */}
+            {/* {this.state.showOppButton ? <Button type="button" onClick={this.handleOppWinner}>Away Team won!</Button> : null} */}
+          <br/>
+      </div>
+      <Label for="winner">winner: {this.props.winner} </Label>
+      {this.state.showSubmit ? <Button type="button" onClick={this.props.submitGame}>Submit Result</Button> : null}
+    </div> 
+        
+        /* <form className="liveGameForm" onSubmit={this.props.submitGame}>
             <p> Create a new Game!</p>
             <label>My Wallet Address: {this.props.myAddress}</label>
             <br/>
@@ -114,8 +159,7 @@ class LiveGame extends Component {
             <br/>
 
             {this.state.showSubmit ? <input type="submit" name="submit" value="Submit Results" /> : null}
-        </form>
-      </div> 
+        </form> */
     )
   }
 }

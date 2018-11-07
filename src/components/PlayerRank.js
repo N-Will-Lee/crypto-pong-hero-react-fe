@@ -4,16 +4,15 @@ import React from 'react';
 
 const PlayerRank = (props) => {
     
-    let address = props.user[0];
-
     function isMe() {
+        let address = props.user[0];
         if (props.myAddress === address)    {
             address = "Me";
         }
         return address;
     }
 
-    console.log("key is: ", props.key)
+    // console.log("key is: ", props.key)
     let rank = props.i + 1;
     return(
         <tr>

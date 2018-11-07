@@ -1,5 +1,7 @@
+
 .App {
   text-align: center;
+  background-color: #27344e;
 }
 
 .App-logo {
@@ -24,14 +26,11 @@
 
 .newGame  {
   background-color: #27344e;
+  /* background-image: url(./assets/background.jpg); */
   color: white;
   align-items: center;
-  height: 420px;
+  height: 100%;
   width: 1000px;
-  
-  
-
-
 }
 
 @keyframes App-logo-spin {
@@ -41,4 +40,105 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+#link {
+  /* color: white; */
+  text-decoration: none;
+} 
+
+th, td, tr{
+  padding:5px;
+  margin: 5px;
+  border-spacing: 5px;
+}
+#opponent-input {
+  width:420px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+#wager-input  {
+  width:420px;
+}
+#opponent-score {
+  width:50px
+}
+#home-score  {
+  width:50px;
+}
+Table {
+  /* table-layout: fixed; */
+  width: 100%;
+  /* border-collapse: collapse; */
+  /* border: 3px solid purple; */
+  /* display: flex; */
+  align-self: center;
+}
+.confirmGames {
+  color: white;
+  /* text-align: center;
+  align-items: center; */
+  /* display: flex; */
+  justify-content: center;
+}
+.createGames  {
+  color: white;
+}
+
+.liveGame {
+  color: white;
+}
+
+
+
+.liveGameTable {
+  /* background-color: #27344e; */
+  background-image: url(./assets/clean-green-table1.jpg);
+  background-repeat: no-repeat;
+  background-size: 40% fixed;
+  background-position: center top;
+  background-position-y: 40px;
+  padding-top: 15px;
+  color: white;
+  text-align: center;
+  align-items: center;
+  height: 550px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+#flex-opponent  {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+}
+#flex-opponent-child1  {
+  display: flex;
+  align-self: center;
+}
+#flex-opponent-child2  {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+#flex-me  {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+}
+#flex-me-child1  {
+  display: flex;
+  align-self: center;
+
+}
+#flex-me-child2  {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
 }
