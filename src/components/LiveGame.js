@@ -100,10 +100,6 @@ class LiveGame extends Component {
       <div className="liveGameComponent">
         <h3>Game Time</h3>
         <h5>Wager (eth): {this.props.wager}</h5>
-        {/* <div className="submitGame">
-          {this.state.showSubmit ? <p><h3> Winner: </h3> <h5>{this.props.winner} </h5></p> : null}
-          {this.state.showSubmit ? <Button color="primary" type="button" onClick={this.props.submitGame}>Submit Result</Button> : null}
-        </div> */}
         <div className="liveGame">
           
           <div className="leftOfGameTable">
@@ -142,12 +138,8 @@ class LiveGame extends Component {
               {this.state.showMeSubmit ? <Button color="primary" type="button" onClick={this.props.submitGame}>Submit Result</Button> : null}
             </div>
           </div>
-
+          
         </div>
-        {/* <div className="submitGame">
-          {this.state.showSubmit ? <h3> Winner: {this.props.winner} </h3> : null}
-          {this.state.showSubmit ? <Button color="primary" type="button" onClick={this.props.submitGame}>Submit Result</Button> : null}
-        </div> */}
       </div> 
     )
   }

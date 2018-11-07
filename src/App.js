@@ -616,10 +616,6 @@ class App extends Component {
             <BreadcrumbItem><Link to="/profile">profile</Link></BreadcrumbItem>
             <BreadcrumbItem className="float-right">My Address: {this.state.creatorWalletAddress}</BreadcrumbItem>
           </Breadcrumb>
-          {/* <h5>My Address: {window.web3.eth.accounts[0]}</h5> */}
-          {/* <Link to="leaderboard">LeaderBoard</Link>
-          <Link to="/">Home</Link>
-          <Link to="/profile">profile</Link> */}
         </nav>
         <Container>
           <Router>

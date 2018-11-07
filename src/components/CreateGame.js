@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from "@reach/router";
-import { Form, FormGroup, Label, Input, Button, Row, Col} from 'reactstrap';
+import { Label, Input, Button} from 'reactstrap';
 
 class CreateGame extends Component {
     constructor (props) {

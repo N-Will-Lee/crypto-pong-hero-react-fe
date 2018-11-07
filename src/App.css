@@ -1,16 +1,12 @@
 
 .App {
   text-align: center;
-  background-color: #27344e;
-}
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
+  background: linear-gradient(#282c34, #2e3d5a);
+  /* background-color: #27344e; */
 }
 
 .App-header {
-  background-color: #282c34;
+  background: linear-gradient(#2e3d5a, #282c34);
   min-height: 10vh;
   display: flex;
   flex-direction: column;
@@ -20,39 +16,29 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
 .newGame  {
-  background-color: #27344e;
+  /* background-color: #27344e; */
+  background: linear-gradient(#282c34, #2e3d5a);
   height: 100%;
   color: white;
   display: flex;
   flex-direction: column;
   text-align: center;
   align-items: center;
+  padding-top: 30px;
+  margin-top: 0px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
 
 #link {
-  /* color: white; */
   text-decoration: none;
 } 
 
-th, td, tr{
+/* th, td, tr{
   padding:5px;
   margin: 5px;
   border-spacing: 5px;
-}
+} */
 #opponent-input {
   width:420px;
   text-align: center;
@@ -78,6 +64,7 @@ Table {
   flex-direction: column;
   text-align: center;
   align-items: center;
+  /* background-color:red; */
 }
 .createGames  {
   color: white;
@@ -108,7 +95,6 @@ Table {
 
 
 .liveGame {
-  /* color: white; */
   display: flex;
   flex-direction: row;
   max-width: 100%;
@@ -128,20 +114,13 @@ Table {
 .liveGameTable {
   background-image: url(./assets/blue-table-large.jpg);
   background-repeat: no-repeat;
-  /* background-size: 110% 110%; */
   background-position: center;
-  /* padding: 5px;
-  border: 5px;
-  border-color: white; */
-  /* background-position-y: 40px; */
   margin-top: 30px;
   color: white;
   text-align: center;
   align-items: center;
   height: 555px;
   width: 275px;
-  /* height: 100%;
-  width: 100%; */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -171,11 +150,6 @@ Table {
   justify-content: space-evenly;
   align-items: center;
 }
-/* .submitGameWinner {
-  padding-top: 40px;
-  background-color: pink;
-} */
-
 #flex-me-child1  {
   width: 170px;
   overflow-wrap: break-word;
