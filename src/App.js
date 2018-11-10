@@ -294,21 +294,22 @@ class App extends Component {
   }
 
   componentWillMount() {
-    this.checkForAddress()
+    // this.checkForAddress()
     this.handleTotalGameNumber()
   }
 
   componentDidMount() {
-    this.delay(500).then(() => { 
-      console.log('done');
-      this.handleRawGamesHistory()
-    })
+    // this.delay(500).then(() => { 
+    //   console.log('done');
+    //   this.handleRawGamesHistory()
+    // })
+    this.checkForAddress()
   }
 
   componentDidUpdate()  {
-    if (this.state.creatorWalletAddress !== undefined)  {
-      clearInterval(setInterval)
-    }
+    // if (this.state.creatorWalletAddress !== undefined)  {
+    //   clearInterval(setInterval)
+    // }
   }
 
   checkForAddress() {
@@ -412,36 +413,30 @@ class App extends Component {
     this.setState({
       allGames: []
     })
-    let newArray = [];
     for(let i=0; i<this.state.gameCount; i++)  {
       this.getFullGamesHistory(i)
-      .then(info => {
-        info.push(i);
-        let cleanArray = []
-        // creator address
-        cleanArray.push(info[0].substring(0,info[0].length -1));
-        //opponent address
-        cleanArray.push(info[1].substring(0,info[1].length -1));
-        //winner address
-        cleanArray.push(info[2].substring(0,info[2].length -1));
-        //creator score
-        cleanArray.push(Number(JSON.stringify(info[3]).substring(1,JSON.stringify(info[3]).length - 1)));
-        //opponent score
-        cleanArray.push(Number(JSON.stringify(info[4]).substring(1,JSON.stringify(info[4]).length - 1)));
+      .then(result => {
+        let newArray = this.state.allGames;
+        let info = result
+        
+        let creatorAddress = (info[0].substring(0,info[0].length));
+        let opponentAddress = (info[1].substring(0,info[1].length));
+        let winnerAddress = (info[2].substring(0,info[2].length -1));
+        let creatorScore = (Number(JSON.stringify(info[3]).substring(1,JSON.stringify(info[3]).length - 1)));
+        let opponentScore = (Number(JSON.stringify(info[4]).substring(1,JSON.stringify(info[4]).length - 1)));
         //wager in Wei
-        cleanArray.push(Number(JSON.stringify(info[5]).substring(1,JSON.stringify(info[5]).length - 1)));
-        //date in unix time
-        cleanArray.push(Number(JSON.stringify(info[6]).substring(1,JSON.stringify(info[6]).length - 1)));
+        let wager = (Number(JSON.stringify(info[5]).substring(1,JSON.stringify(info[5]).length - 1)));
+        let unixTime = (Number(JSON.stringify(info[6]).substring(1,JSON.stringify(info[6]).length - 1)));
         //game confirmation bool
-        cleanArray.push(info[7]);
+        let gameConfirmed = (info[7]);
         //gameId - order of game in contract mapping
-        cleanArray.push(info[8]);
-        newArray.push(cleanArray);
+        let gameId = (i);
+        newArray.push([creatorAddress, opponentAddress, winnerAddress, creatorScore, opponentScore, wager, unixTime, gameConfirmed, gameId]);
+        this.setState({
+          allGames: newArray
+        })
       })
     }
-    this.setState({
-      allGames: newArray
-    })
   }
 
   //works

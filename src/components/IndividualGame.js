@@ -4,16 +4,12 @@ import { Button } from 'reactstrap';
 
 
 const IndividualGame = (props) => {
-    
-    // let myAddress = props.creatorWalletAddress.substring(0,5);
-    let myAddress = props.opponentWalletAddress.substring(0,5);
-    // console.log(myAddress);
 
-    // let oppAddress = props.opponentWalletAddress.substring(0,5);
-    let oppAddress = props.creatorWalletAddress.substring(0,5);
-    // console.log(oppAddress);
+    let myAddress = props.game[0].substring(0,5);
+    let oppAddress = props.game[1].substring(0,5);
+    let winnerAddress = props.game[2].substring(0,5);
 
-    let winnerAddress = props.winner.substring(0,5);
+    // find out who is the winner
     function winnerName()   {
         if(winnerAddress === myAddress) {
             return "Me";
@@ -23,38 +19,13 @@ const IndividualGame = (props) => {
         }
     }
 
-    // console.log(winner);
+    let wager = window.web3.fromWei(props.game[5], 'ether');
+    let unixTime = props.game[6];
 
-    // let crScore = Number(JSON.stringify(props.creatorScore).substring(1,JSON.stringify(props.creatorScore).length - 1));
-    let oppScore = Number(JSON.stringify(props.creatorScore).substring(1,JSON.stringify(props.creatorScore).length - 1));
-
-    // console.log(crScore);
-    
-    
-    // let oppScore = Number(JSON.stringify(props.opponentScore).substring(1,JSON.stringify(props.opponentScore).length - 1));
-    let crScore = Number(JSON.stringify(props.opponentScore).substring(1,JSON.stringify(props.opponentScore).length - 1));
-    // console.log("props.opponentScore.length ", JSON.stringify(props.opponentScore).length)
-    // console.log(oppScore);
-
-    let weiWager = Number(JSON.stringify(props.wager).substring(1, JSON.stringify(props.wager).length-1));
-    let wager = window.web3.fromWei(weiWager, 'ether');
-    // console.log("wager hopefully decimal is: ",wager);
-
-    let time = Number(JSON.stringify(props.time).substring(1,11));
-    // console.log(time);
-
-    let date = props.timeConverter(time);
-
-    let confirmed = JSON.stringify(props.confirmed);
-    // console.log(confirmed);
-
-    // let gameId = Number(JSON.stringify(props.gameId).substring(1,JSON.stringify(props.gameId).length - 1))
-    let gameId = Number(JSON.stringify(props.gameId))
-
+    //converting unix time to mo/day/yr hr:time
+    let date = props.timeConverter(unixTime);
     function handleGameConfirmation()  {
-        props.handleConfirmGame(gameId)
-        // console.log("gameId going into app.js function is: ", gameId)
-        // console.log("stringify props.gameId coming into function is: ", JSON.stringify(props.gameId))
+        props.handleConfirmGame(props.game[8]);
     }
 
 
@@ -63,12 +34,11 @@ const IndividualGame = (props) => {
             <th> {myAddress}</th>
             <td> {oppAddress}</td>
             <td> {winnerName()}</td>
-            <td> {crScore} to {oppScore}</td>
+            <td> {props.game[3]} to {props.game[4]}</td>
             <td> {wager}</td>
             <td> {date}</td>
             <td>  <Button color="success" type="button" onClick={handleGameConfirmation}>Confirm</Button>{' '}</td>
         </tr>
-
     )
 }
 

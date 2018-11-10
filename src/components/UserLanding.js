@@ -24,6 +24,7 @@ const UserLanding = (props) => {
                     allGames={props.allGames}
                     handleConfirmGame={props.handleConfirmGame}
                     timeConverter={props.timeConverter}
+                    // gameCount={props.gameCount}
                 />
         </div>
     )
