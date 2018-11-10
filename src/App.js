@@ -284,8 +284,8 @@ class App extends Component {
     this.declareOpponentWinner = this.declareOpponentWinner.bind (this);
     this.getPlayerGameCount = this.getPlayerGameCount.bind (this);
     this.handleTotalGameNumber = this.handleTotalGameNumber.bind(this);
-    this.getGameinformation = this.getGameinformation.bind (this);
-    this.handleGameInformation = this.handleGameInformation.bind (this);
+    this.getFullGamesHistory = this.getFullGamesHistory.bind (this);
+    this.handleRawGamesHistory = this.handleRawGamesHistory.bind (this);
     this.confirmGame = this.confirmGame.bind (this);
     this.handleConfirmGame = this.handleConfirmGame.bind (this);
     this.countWinsLossesTotal = this.countWinsLossesTotal.bind (this);
@@ -301,7 +301,7 @@ class App extends Component {
   componentDidMount() {
     this.delay(500).then(() => { 
       console.log('done');
-      this.handleGameInformation()
+      this.handleRawGamesHistory()
     })
   }
 
@@ -319,7 +319,7 @@ class App extends Component {
 
         this.setState({creatorWalletAddress: window.web3.eth.accounts[0]});
         this.handleTotalGameNumber()
-        this.handleGameInformation()
+        this.handleRawGamesHistory()
         clearInterval(timerid);
       }
     }.bind(this), 1000)
@@ -394,7 +394,7 @@ class App extends Component {
   }
   
   //works
-  getGameinformation(int) {
+  getFullGamesHistory(int) {
     const { gamesPlayed } = this.state.ContractInstance;
     
     return new Promise((resolve, reject) => {
@@ -407,55 +407,41 @@ class App extends Component {
       });
     })
   }
-  //works
-  handleGameInformation()  {
+  
+  handleRawGamesHistory()  {
     this.setState({
       allGames: []
     })
-    // let newArray = [];
+    let newArray = [];
     for(let i=0; i<this.state.gameCount; i++)  {
-      this.getGameinformation(i)
+      this.getFullGamesHistory(i)
       .then(info => {
-        // console.log("actual game information for game " + i + " is: " + info);
-        let newArray = this.state.allGames
-        // console.log("newArray = this.state.allGames: ", newArray)
-        // console.log("GamesPlayed index is: ", i)
-        info.push(i)
-        // console.log("but newest game to be added sets gameId as: ", info[i])
-        newArray.push(info)
-        // console.log("game info returned + gameId at last position: ", newArray)
+        info.push(i);
         let cleanArray = []
         // creator address
-        // let creatorAddress = newArray[0];
-        cleanArray.push(newArray[0]);
+        cleanArray.push(info[0].substring(0,info[0].length -1));
         //opponent address
-        // cleanArray.push(newArray[1].substring(0,5));
-        cleanArray.push(newArray[1]);
+        cleanArray.push(info[1].substring(0,info[1].length -1));
         //winner address
-        // cleanArray.push(newArray[2].substring(0,5));
-        cleanArray.push(newArray[2]);
+        cleanArray.push(info[2].substring(0,info[2].length -1));
         //creator score
-        cleanArray.push(Number(JSON.stringify(newArray[3]).substring(1,JSON.stringify(newArray[3]).length - 1)));
+        cleanArray.push(Number(JSON.stringify(info[3]).substring(1,JSON.stringify(info[3]).length - 1)));
         //opponent score
-        cleanArray.push(Number(JSON.stringify(newArray[4]).substring(1,JSON.stringify(newArray[4]).length - 1)));
+        cleanArray.push(Number(JSON.stringify(info[4]).substring(1,JSON.stringify(info[4]).length - 1)));
         //wager in Wei
-        let weiWager = Number(JSON.stringify(newArray[5]).substring(1,JSON.stringify(newArray[5]).length - 1));
-        cleanArray.push(weiWager);
+        cleanArray.push(Number(JSON.stringify(info[5]).substring(1,JSON.stringify(info[5]).length - 1)));
         //date in unix time
-        cleanArray.push(Number(JSON.stringify(newArray[6]).substring(1,JSON.stringify(newArray[6]).length - 1)));
+        cleanArray.push(Number(JSON.stringify(info[6]).substring(1,JSON.stringify(info[6]).length - 1)));
         //game confirmation bool
-        cleanArray.push(newArray[7]);
+        cleanArray.push(info[7]);
         //gameId - order of game in contract mapping
-        cleanArray.push(newArray[8]);
-        console.log("clean new array is: ", cleanArray)
-
-
-
-        this.setState({
-          allGames: newArray
-        })
+        cleanArray.push(info[8]);
+        newArray.push(cleanArray);
       })
     }
+    this.setState({
+      allGames: newArray
+    })
   }
 
   //works
