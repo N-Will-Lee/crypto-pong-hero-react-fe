@@ -419,11 +419,10 @@ class App extends Component {
         // console.log("actual game information for game " + i + " is: " + info);
         let newArray = this.state.allGames
         // console.log("newArray = this.state.allGames: ", newArray)
-        let newInfo = info;
         // console.log("GamesPlayed index is: ", i)
-        newInfo.push(i)
-        // console.log("but newest game to be added sets gameId as: ", newInfo[8])
-        newArray.push(newInfo)
+        info.push(i)
+        // console.log("but newest game to be added sets gameId as: ", info[i])
+        newArray.push(info)
         // console.log("game info returned + gameId at last position: ", newArray)
         this.setState({
           allGames: newArray

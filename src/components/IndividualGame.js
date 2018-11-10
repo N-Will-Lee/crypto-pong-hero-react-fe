@@ -59,23 +59,14 @@ const IndividualGame = (props) => {
 
 
     return(
-
-        // <tr>
-        //     <th scope="row">1</th>
-        //     <td>Mark</td>
-        //     <td>Otto</td>
-        //     <td>@mdo</td>
-        // </tr>
         <tr>
             <th> {myAddress}</th>
             <td> {oppAddress}</td>
             <td> {winnerName()}</td>
             <td> {crScore} to {oppScore}</td>
-            {/* <td> {oppScore}</td> */}
             <td> {wager}</td>
             <td> {date}</td>
             <td>  <Button color="success" type="button" onClick={handleGameConfirmation}>Confirm</Button>{' '}</td>
-            {/* <button type="button" onClick={handleGameConfirmation}>confirm</button></td> */}
         </tr>
 
     )
