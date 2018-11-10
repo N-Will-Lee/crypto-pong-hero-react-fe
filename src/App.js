@@ -424,6 +424,33 @@ class App extends Component {
         // console.log("but newest game to be added sets gameId as: ", info[i])
         newArray.push(info)
         // console.log("game info returned + gameId at last position: ", newArray)
+        let cleanArray = []
+        // creator address
+        // let creatorAddress = newArray[0];
+        cleanArray.push(newArray[0]);
+        //opponent address
+        // cleanArray.push(newArray[1].substring(0,5));
+        cleanArray.push(newArray[1]);
+        //winner address
+        // cleanArray.push(newArray[2].substring(0,5));
+        cleanArray.push(newArray[2]);
+        //creator score
+        cleanArray.push(Number(JSON.stringify(newArray[3]).substring(1,JSON.stringify(newArray[3]).length - 1)));
+        //opponent score
+        cleanArray.push(Number(JSON.stringify(newArray[4]).substring(1,JSON.stringify(newArray[4]).length - 1)));
+        //wager in Wei
+        let weiWager = Number(JSON.stringify(newArray[5]).substring(1,JSON.stringify(newArray[5]).length - 1));
+        cleanArray.push(weiWager);
+        //date in unix time
+        cleanArray.push(Number(JSON.stringify(newArray[6]).substring(1,JSON.stringify(newArray[6]).length - 1)));
+        //game confirmation bool
+        cleanArray.push(newArray[7]);
+        //gameId - order of game in contract mapping
+        cleanArray.push(newArray[8]);
+        console.log("clean new array is: ", cleanArray)
+
+
+
         this.setState({
           allGames: newArray
         })
