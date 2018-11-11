@@ -418,7 +418,7 @@ class App extends Component {
       .then(result => {
         let newArray = this.state.allGames;
         let info = result
-        
+
         let creatorAddress = (info[0].substring(0,info[0].length));
         let opponentAddress = (info[1].substring(0,info[1].length));
         let winnerAddress = (info[2].substring(0,info[2].length -1));
