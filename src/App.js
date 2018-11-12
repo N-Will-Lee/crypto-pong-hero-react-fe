@@ -533,6 +533,7 @@ class App extends Component {
 
   countWinsLossesTotal(address) {
     let confirmedGamesArray = this.getAllConfirmedGames()
+    console.log("confirmedGamesArray is: ", confirmedGamesArray)
     let wins = 0;
     let losses = 0;
     let total = 0;
