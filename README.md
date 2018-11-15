@@ -1,4 +1,4 @@
-<img src="./src/assets/preview.png">
+<img src="./src/assets/preview.png" width="800">
 
 
 ### Welcome to Crypto Pong Hero
