@@ -1,4 +1,4 @@
-<img src="./src/assets/preview.png" width="200">
+<img src="./src/assets/preview.png">
 
 
 ### Welcome to Crypto Pong Hero
@@ -20,7 +20,7 @@ Crypto Pong Hero was built from the ground up using React.js, solidity, Web3.js,
 
 ### Solidity
 
-If you would like to view the actual smart contract on the Robsten Test Network, a link to that repo is [here](https://github.com/N-Will-Lee/crypto-pong-hero-contract)
+If you would like to view the actual smart contract on the Robsten Test Network, a link to that repo is [here](https://github.com/N-Will-Lee/crypto-pong-hero-contract).
 
 ### License
 
